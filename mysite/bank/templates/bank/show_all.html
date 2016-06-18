@@ -1,0 +1,16 @@
+
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+{% if accounts %}
+    <ul>
+    {% for a in accounts %}
+        <li >{{ a.user.username }} {{a.balance}}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,92 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+    <style>
+        #header {
+        background-color:black;
+        color:white;
+        text-align:center;
+        padding:5px;
+        }
+        #nav {
+        line-height:30px;
+        background-color:#eeeeee;
+        height:300px;
+        width:100px;
+        float:left;
+        padding:5px;
+        }
+        #section {
+        width:350px;
+        float:left;
+        padding:10px;
+        }
+        #footer {
+        background-color:black;
+        color:white;
+        clear:both;
+        text-align:center;
+        padding:5px;
+        }
+        #head_table {
+        width:100%
+
+}
+        #logout_cell{
+        text-align:right
+        }
+
+        a.head_link:link{
+        color: white;
+        background-color: transparent;
+        text-decoration: none;
+        }
+        a.head_link:visited{
+        color: white;
+        background-color: transparent;
+        text-decoration: none;
+        }
+    a.head_link:hover{
+        color: green;
+        background-color: transparent;
+        text-decoration: underline;
+        }
+    p.log_info{
+        color:white;
+        text-align:right}
+
+    </style>
+</head>
+<body>
+<div id="header">
+
+    <table id="head_table">
+        <tr>
+            <td><h1><a class="head_link" href={% url 'bank:index' %}> LFMSH Banking Systems </a></h1></td>
+
+            {% if request.user.is_authenticated %}
+            <td><p class="log_info"> You are logged in as {{request.user.username}} </p></td>
+            {%else%}
+            <td><p class="log_info"> You are not logged in </p></td>
+            {%endif%}
+
+
+            <td id="logout_cell"><a class="head_link" href={% url 'bank:logout' %}> Log out </a></td>
+
+        </tr>
+
+    </table>
+
+
+</div>
+
+
+<div id="section">
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+<div id="footer">
+    Copyright © lfmsh.ru
+</div>
+</body>
