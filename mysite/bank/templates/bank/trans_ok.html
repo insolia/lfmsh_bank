@@ -2,8 +2,32 @@
 
 {% block content %}
 
-<p>Your transaction was successfully added!</p>
-<p>Current balance of {{account.user.first_name}} {{account.user.last_name}} is {{account.balance}}</p>
+<p>Your transactions was successfully added!</p>
+<p>Changed balance</p>
+
+<table id="trans_ok_table">
+        <tr>
+            <td>ФИО Пионера</td>
+            <td>Поступление</td>
+            <td>Сумма</td>
+        </tr>
+
+    {% for a in transactions %}
+        <tr>
+            <td>{{a.recipient.user.first_name}} {{a.recipient.user.last_name}}</td>
+            <td>{{a.value}}</td>
+            <td>{{a.recipient.balance}}</td>
+        </tr>
+
+    {% endfor %}
+
+
+</table>
+
+
+
+
+
 <p>Here is your options</p>
 <br>
 <a href= "{% url 'bank:all_acc' %}"> Look pioners money</a>

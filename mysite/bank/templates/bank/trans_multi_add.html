@@ -1,0 +1,47 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+
+
+
+<form action= {% url 'bank:multi_trans' %} method="post">
+{% csrf_token %}
+
+
+<table id="trans_add_table">
+        <tr>
+            <td>ФИО Пионера</td>
+            <td>Сумма</td>
+            <td>Подтверждение</td>
+        </tr>
+        <tr>
+            <td>Для всех</td>
+            <td>input</td>
+            <td>input</td>
+        </tr>
+
+
+    {% for a in accounts %}
+        <tr>
+            <td>{{a.user.first_name}} {{a.user.last_name}}</td>
+            <td><input type="number" name="{{a.user.username}}_value"  /></td>
+            <td><input type="checkbox" name="{{a.user.username}}_check" value='0'></td>
+        </tr>
+
+    {% endfor %}
+
+
+</table>
+
+<p>Please add description (one for all)</p>
+<textarea name="description" rows="5" cols="50">
+</textarea>
+<br>
+
+<input type="submit" value="Make transactions" />
+
+</form>
+
+
+{% endblock %}

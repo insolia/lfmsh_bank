@@ -5,4 +5,5 @@ class TransactionForm(forms.ModelForm):
 
     class Meta:
         model = Transaction
-        fields = ('recepient', 'value','description')
+        fields = ('recipient', 'value','description')
+

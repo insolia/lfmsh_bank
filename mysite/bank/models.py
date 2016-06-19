@@ -14,14 +14,14 @@ class Account(models.Model):
 
 
 class Transaction(models.Model):
-    recepient = models.ForeignKey(Account)
+    recipient = models.ForeignKey(Account)
     description = models.TextField(max_length=400,blank=True)
     value = models.IntegerField(default=0)
     last_modified_date = models.DateTimeField(auto_now=True)
+    creator = models.ForeignKey(User)
 
 
     def __unicode__(self):
-        print self.last_modified_date
-        return self.recepient.user.username + " " + str(self.value)
+        return self.recipient.user.username + " " + str(self.value)
 
 
