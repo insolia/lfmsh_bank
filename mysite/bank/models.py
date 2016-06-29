@@ -46,9 +46,6 @@ class TransactionType(models.Model):
         return self.name
 
 
-
-
-
 class Transaction(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
 

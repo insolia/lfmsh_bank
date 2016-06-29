@@ -80,7 +80,7 @@ def single_trans(request):
             user_account = Account.objects.get(user=new_trans.recipient.user)
             print user_account
             # print(new_trans.recipient)
-            #print(new_trans.recipient.balance)
+            # print(new_trans.recipient.balance)
             print user_account.balance
 
             user_account.balance += new_trans.value
