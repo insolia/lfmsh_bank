@@ -1,0 +1,34 @@
+
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+<h1> Hello Mr.  {{request.user.first_name}}</h1>
+
+
+{% if user_group == 'pioner' %}
+
+    <h2> Your current balance is {{request.user.account.balance}} @</h2>
+
+{%endif%}
+
+
+<p>Here is your options:</p>
+<br>
+<a href= "{% url 'bank:my_trans' %}"> Show my transactions</a>
+
+{% if user_group == 'pedsostav' %}
+    <br>
+    <a href= "{% url 'bank:all_acc' %}"> Show all pioners with balances </a>
+    <br>
+    <p>Add transaction forms:</p>
+
+    <a href= "{% url 'bank:add_sem' %}"> Seminar </a>
+    <br>
+
+    <a href= "{% url 'bank:add_single' %}"> Special </a>
+
+{%endif%}
+
+
+{% endblock %}

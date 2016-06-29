@@ -20,24 +20,9 @@ def index(request):
     if not request.user.is_authenticated():
         return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
 
-    user_group = request.user.groups.all()
+    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
 
-    print(user_group)
-    print request.user
-
-    if user_group:
-        user_group = user_group[0]
-    else:
-        return HttpResponse('no group')
-
-    print user_group
-    print request.user
-
-    if user_group.name == 'pioners':
-        return render(request, 'bank/index_pioner.html', {'user': request.user, 'request': request})
-
-    if user_group.name == 'pedsostav':
-        return render(request, 'bank/index_ped.html', {'user': request.user, 'request': request})
+    return render(request, 'bank/index.html', {'user_group': user_group_name})
 
 
 def show_accounts(request):
@@ -59,18 +44,19 @@ class AccsView(generic.ListView):
     context_object_name = 'accounts'
 
     def get_queryset(self):
-        """Return the last five published questions."""
         return Account.objects.order_by('-balance')
 
 
-def show_my_account(request):
+def show_my_trans(request):
     if not request.user.is_authenticated():
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-    user_account = Account.objects.filter(user=request.user)[0]
-    transactions = Transaction.objects.filter(recipient=user_account).order_by('-last_modified_date')
-    return render(request, 'bank/pioner_acc.html',
-                  {'account': user_account, 'transactions': transactions, 'request': request})
+    in_trans = Transaction.objects.filter(recipient=request.user).order_by('-last_modified_date')
+    out_trans = Transaction.objects.filter(creator=request.user).order_by('-last_modified_date')
+    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
+
+    return render(request, 'bank/trans_list.html',
+                  {'in_trans': in_trans, 'out_trans': out_trans, 'user_group': user_group_name})
 
 
 def single_trans(request):
@@ -93,7 +79,7 @@ def single_trans(request):
 
             user_account = Account.objects.get(user=new_trans.recipient.user)
             print user_account
-            #print(new_trans.recipient)
+            # print(new_trans.recipient)
             #print(new_trans.recipient.balance)
             print user_account.balance
 
