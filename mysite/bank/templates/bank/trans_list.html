@@ -1,0 +1,68 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+
+<h2> Transaction page of Mr. {{request.user}} </h2>
+<br>
+{% if user_group == 'pioner' %}
+<h3> Your current balance is {{request.user.account.balance}} @</h3>
+{%endif%}
+
+<br>
+
+{% if user_group == 'pioner' %}
+{% if in_trans %}
+<p>And here is last transactions to your account</p>
+
+<table>
+    <tr>
+
+        <td>Сумма</td>
+        <td>Описание</td>
+        <td>Тип</td>
+
+
+    </tr>
+    {% for t in in_trans %}
+    <tr>
+        <td>{{t.value}}</td>
+        <td>{{t.description}}</td>
+        <td>{{t.type}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>No incoming transactions are available.</p>
+{% endif %}
+{% endif %}
+
+{% if out_trans %}
+
+<p>And here is last transactions you did</p>
+
+<table>
+    <tr>
+        <td>ФИ получателя
+        <td>
+        <td>Сумма</td>
+        <td>Описание</td>
+        <td>Тип</td>
+
+
+    </tr>
+    {% for t in out_trans %}
+    <tr>
+        <td>{{t.recipient}}
+        <td>
+        <td>{{t.value}}</td>
+        <td>{{t.description}}</td>
+        <td>{{t.type}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>No outcoming transactions are available.</p>
+{% endif %}
+
+{% endblock %}
