@@ -49,3 +49,9 @@ a.head_link:link{
     p.log_info{
         color:white;
         text-align:right}
+
+.trans_table{
+
+    border: 1px solid black;
+
+}

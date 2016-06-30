@@ -5,7 +5,7 @@
 <p>Your transactions was successfully added!</p>
 <p>Changed balance</p>
 
-<table id="trans_ok_table">
+<table class='trans_table' , id="trans_ok_table">
         <tr>
             <td>ФИО Пионера</td>
             <td>Поступление</td>
@@ -28,10 +28,9 @@
 
 
 
-<p>Here is your options</p>
 <br>
-<a href= "{% url 'bank:all_acc' %}"> Look pioners money</a>
+<a href="{% url 'bank:all_acc' %}"> See list of all pioners</a>
 <br>
-<a href="{% url 'bank:add_special' %}"> Add another transaction</a>
+<a href="{% url 'bank:index' %}"> Home page</a>
 
 {% endblock %}

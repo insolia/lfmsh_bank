@@ -1,0 +1,37 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+
+<form action={% url 'bank:add_zaryadka' %} method="post">
+{% csrf_token %}
+
+
+<table class='trans_table' id="trans_add_table">
+        <tr>
+            <td>ФИО Пионера</td>
+            <td>Сходил на зарядку</td>
+        </tr>
+
+    {% for u in users %}
+        <tr>
+            <td>{{u.first_name}} {{u.last_name}}</td>
+            <td><input type="checkbox" name="{{u.username}}_check" value='0'></td>
+        </tr>
+
+    {% endfor %}
+
+
+</table>
+
+<p>Можете написать здесь что нибудь мотивирующее для этих ребят</p>
+<textarea name="description" rows="5" cols="50">
+</textarea>
+<br>
+
+<input type="submit" value="Make transactions" />
+
+</form>
+
+
+{% endblock %}

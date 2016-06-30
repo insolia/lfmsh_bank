@@ -11,6 +11,8 @@ from django.views import generic
 from django.core.urlresolvers import reverse
 from .forms import SprecialTransForm, SeminarTransForm
 from django.utils import timezone
+import helper_functions as hf
+
 
 
 
@@ -66,7 +68,7 @@ def add_special(request):
             type = TransactionType.objects.get(name='Other')
 
             new_trans = Transaction(recipient=recipient, value=value, creator=creator, description=description,
-                                    type=type)
+                                    type=type, status='CO')
 
             new_trans.count()
 
@@ -81,52 +83,44 @@ def add_special(request):
 
 
 def add_zaryadka(request):
-    user_group = request.user.groups.all()
+    if not request.user.is_authenticated():
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-    if user_group:
-        user_group = user_group[0]
-    else:
-        return HttpResponse('no group')
+    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
 
-    if user_group.name == 'pioners':
+    if user_group_name == 'pioner':
         return redirect(reverse('bank:index'))
 
     if request.method == "POST":
 
+        zar_attendants = []
 
-        print
-        print request.POST
-        print request.POST['pioner_value']
+        for u in User.objects.filter(groups__name='pioner'):
+            if u.username + '_check' in request.POST:
+                zar_attendants.append(u)
+
+        value = hf.zaryadka(len(zar_attendants))
+        description = request.POST['description']
+        creator = request.user
+        type = TransactionType.objects.get(name='Zaryadka')
 
         new_transactions = []
+        for u in zar_attendants:
+            new_trans = Transaction(recipient=u, value=value, creator=creator, description=description,
+                                    type=type, status='CO')
+            new_trans.count()
+            new_transactions.append(new_trans)
 
-        for a in Account.objects.all():
-            if a.user.username + '_check' in request.POST:
-                recipient = a
-                value = (request.POST[a.user.username + '_value'])
-                if value:
-                    value = int(value)
-                else:
-
-                    value = 0
-                desc = request.POST['description']
-                trans = Transaction(recipient=recipient, value=value, description=desc)
-                trans.creator = request.user
-
-                trans.save()
-                a.balance += value
-                a.save()
-                new_transactions.append(trans)
         if new_transactions:
             return render(request, 'bank/trans_ok.html', {'transactions': new_transactions})
 
         else:
-            accounts = Account.objects.order_by('user')
-            return render(request, 'bank/trans_multi_add.html', {'request': request, 'accounts': accounts})
+            users = User.objects.filter(groups__name='pioner')
+            return render(request, 'bank/trans_add_zaryadka.html', {'users': users})
     else:
 
-        accounts = Account.objects.order_by('user')
-        return render(request, 'bank/trans_multi_add.html', {'request': request, 'accounts': accounts})
+        users = User.objects.filter(groups__name='pioner')
+        return render(request, 'bank/trans_add_zaryadka.html', {'users': users})
 
 
 def add_sem(request):
