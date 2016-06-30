@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from bank.models import Account, Transaction
+from bank.models import Account, Transaction, TransactionType
 from django.template import Context, loader
 from django.conf import settings
 from django.shortcuts import redirect
@@ -9,7 +9,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.views import logout_then_login
 from django.views import generic
 from django.core.urlresolvers import reverse
-from .forms import TransactionForm
+from .forms import SprecialTransForm, SeminarTransForm
 from django.utils import timezone
 
 
@@ -46,47 +46,38 @@ def show_my_trans(request):
 
 
 def add_special(request):
-    user_group = request.user.groups.all()
+    if not request.user.is_authenticated():
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-    if user_group:
-        user_group = user_group[0]
-    else:
-        return HttpResponse('no group')
+    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
 
-    if user_group.name == 'pioners':
+    if user_group_name == 'pioner':
         return redirect(reverse('bank:index'))
 
     if request.method == "POST":
 
-        form = TransactionForm(request.POST)
+        form = SprecialTransForm(request.POST)
         if form.is_valid():
-            new_trans = form.save(commit=False)
-            new_trans.pub_date = timezone.now()
+            value = form.cleaned_data['value']
+            recipient = form.cleaned_data['recipient'].user
+            description = form.cleaned_data['description']
+            creator = request.user
 
-            user_account = Account.objects.get(user=new_trans.recipient.user)
-            print user_account
-            # print(new_trans.recipient)
-            # print(new_trans.recipient.balance)
-            print user_account.balance
+            type = TransactionType.objects.get(name='Other')
 
-            user_account.balance += new_trans.value
-            user_account.save()
-            new_trans.creator = request.user
-            new_trans.save()
+            new_trans = Transaction(recipient=recipient, value=value, creator=creator, description=description,
+                                    type=type)
 
-            #print(new_trans.recipient.balance)
-            print user_account.balance
-
-            new_trans.recipient.balance += new_trans.value
+            new_trans.count()
 
             return render(request, 'bank/trans_ok.html', {'transactions': [new_trans]})
-        return render(request, 'bank/trans_add.html', {'form': form})
+        return render(request, 'bank/trans_add_special.html', {'form': form})
 
 
     else:
 
-        form = TransactionForm()
-        return render(request, 'bank/trans_add.html', {'form': form})
+        form = SprecialTransForm()
+        return render(request, 'bank/trans_add_special.html', {'form': form})
 
 
 def add_zaryadka(request):
@@ -139,4 +130,39 @@ def add_zaryadka(request):
 
 
 def add_sem(request):
-    pass
+    if not request.user.is_authenticated():
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
+
+    if user_group_name == 'pioner':
+        return redirect(reverse('bank:index'))
+
+    if request.method == "POST":
+
+        form = SeminarTransForm(request.POST)
+        if form.is_valid():
+            score = form.cleaned_data['score']
+
+            ### reprocess score to money
+            value = score // 2
+            recipient = form.cleaned_data['recipient'].user
+            description = form.cleaned_data['description']
+            creator = request.user
+
+            type = TransactionType.objects.get(name='Seminar')
+
+            new_trans = Transaction(recipient=recipient, value=value, creator=creator, description=description,
+                                    type=type)
+
+            new_trans.count()
+
+            return render(request, 'bank/trans_ok.html', {'transactions': [new_trans]})
+        return render(request, 'bank/trans_add_seminar.html', {'form': form})
+
+
+    else:
+
+        form = SeminarTransForm()
+        return render(request, 'bank/trans_add_seminar.html', {'form': form})
+

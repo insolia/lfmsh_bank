@@ -14,9 +14,9 @@
 
     {% for a in transactions %}
         <tr>
-            <td>{{a.recipient.user.first_name}} {{a.recipient.user.last_name}}</td>
+            <td>{{a.recipient.first_name}} {{a.recipient.last_name}}</td>
             <td>{{a.value}}</td>
-            <td>{{a.recipient.balance}}</td>
+            <td>{{a.recipient.account.balance}}</td>
         </tr>
 
     {% endfor %}
@@ -32,6 +32,6 @@
 <br>
 <a href= "{% url 'bank:all_acc' %}"> Look pioners money</a>
 <br>
-<a href= "{% url 'bank:pay' %}"> Add another transaction</a>
+<a href="{% url 'bank:add_special' %}"> Add another transaction</a>
 
 {% endblock %}
