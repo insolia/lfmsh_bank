@@ -2,14 +2,20 @@
 
 {% block content %}
 
-{% if accounts %}
-<ul>
-    {% for a in accounts %}
-    <li>{{ a.user.username }} {{a.balance}}</li>
+<table>
+    <tr>
+        <td>Пионер</td>
+        <td>Деньги</td>
+
+
+    </tr>
+    {% for u in accounts %}
+    <tr>
+        <td>{{u}}</td>
+        <td>{{u.balance}}</td>
+    </tr>
     {% endfor %}
-</ul>
-{% else %}
-<p>No polls are available.</p>
-{% endif %}
+</table>
+
 
 {% endblock %}

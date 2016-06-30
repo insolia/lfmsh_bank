@@ -11,11 +11,11 @@ urlpatterns = patterns('',
 
 
                        url(r'^my_trans/$', views.show_my_trans, name='my_trans'),
-                       url(r'^all_acc$', views.AccsView.as_view(), name='all_acc'),
+                       url(r'^all_acc$', views.all_accounts_view.as_view(), name='all_acc'),
 
-                       url(r'^add_trans/single/$', views.single_trans, name='add_single'),
-                       url(r'^add_trans/multi/', views.multi_trans, name='multi_trans'),
-                       url(r'^add_trans/sem/', views.multi_trans, name='add_sem'),
+                       url(r'^add_trans/single/$', views.add_special, name='add_special'),
+                       url(r'^add_trans/zaryadka/', views.add_zaryadka, name='add_zaryadka'),
+                       url(r'^add_trans/sem/', views.add_sem, name='add_sem'),
 
                        )
 

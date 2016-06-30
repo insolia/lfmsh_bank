@@ -25,21 +25,7 @@ def index(request):
     return render(request, 'bank/index.html', {'user_group': user_group_name})
 
 
-def show_accounts(request):
-    if not request.user.is_authenticated():
-        return redirect('%s?next=%s' % (
-            settings.LOGIN_URL, request.path))  # reverse('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-    accounts = Account.objects.order_by('-balance')
-    template = loader.get_template('bank/show_all.html')
-    context = Context({
-        'accounts': accounts,
-    })
-
-    return HttpResponse(template.render(context))
-
-
-class AccsView(generic.ListView):
+class all_accounts_view(generic.ListView):
     template_name = 'bank/show_all.html'
     context_object_name = 'accounts'
 
@@ -59,7 +45,7 @@ def show_my_trans(request):
                   {'in_trans': in_trans, 'out_trans': out_trans, 'user_group': user_group_name})
 
 
-def single_trans(request):
+def add_special(request):
     user_group = request.user.groups.all()
 
     if user_group:
@@ -103,7 +89,7 @@ def single_trans(request):
         return render(request, 'bank/trans_add.html', {'form': form})
 
 
-def multi_trans(request):
+def add_zaryadka(request):
     user_group = request.user.groups.all()
 
     if user_group:
@@ -151,3 +137,6 @@ def multi_trans(request):
         accounts = Account.objects.order_by('user')
         return render(request, 'bank/trans_multi_add.html', {'request': request, 'accounts': accounts})
 
+
+def add_sem(request):
+    pass
