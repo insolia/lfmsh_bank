@@ -14,18 +14,7 @@ class Account(models.Model):
     balance = models.IntegerField(default=0)
     third_name = models.CharField(max_length=40, default='Not stated')
 
-    OTR_CHOICES = [
-        ('FI', 'First'),
-        ('SE', 'Second'),
-        ('TH', 'Third'),
-        ('FO', 'Fourth'),
-        ('PD', 'Ped')
-    ]
-
-    otr = models.CharField(
-        max_length=2,
-        choices=OTR_CHOICES,
-        default='FI')
+    otr = models.IntegerField(default=1)
 
     grade = models.IntegerField(blank=True, default=8)
     lab_passed = models.IntegerField(blank=True, default=0)
@@ -34,7 +23,14 @@ class Account(models.Model):
 
 
     def __unicode__(self):
-        return self.user.last_name + ' ' + self.user.first_name[0] + '. ' + self.third_name[0] + '.'
+        if self.user.first_name:
+
+            return self.user.last_name + ' ' + self.user.first_name[0] + '. ' + self.third_name[0] + '.'
+        else:
+            return self.user.last_name
+
+    def long_name(self):
+        return self.user.last_name + ' ' + self.user.first_name + ' ' + self.third_name
 
 
 class TransactionType(models.Model):

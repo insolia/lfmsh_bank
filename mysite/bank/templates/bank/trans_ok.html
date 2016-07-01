@@ -15,8 +15,11 @@
     {% for a in transactions %}
         <tr>
             <td>{{a.recipient.first_name}} {{a.recipient.last_name}}</td>
-            <td>{{a.value}}</td>
-            <td>{{a.recipient.account.balance}}</td>
+            <td>{% if a.value > 0 %}+
+                {% endif %}
+                {{ a.value }}@
+            </td>
+            <td>{{a.recipient.account.balance}}@</td>
         </tr>
 
     {% endfor %}

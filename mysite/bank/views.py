@@ -32,7 +32,7 @@ class all_accounts_view(generic.ListView):
     context_object_name = 'accounts'
 
     def get_queryset(self):
-        return Account.objects.order_by('-balance')
+        return Account.objects.filter(user__groups__name='pioner').order_by('-balance')
 
 
 def show_my_trans(request):

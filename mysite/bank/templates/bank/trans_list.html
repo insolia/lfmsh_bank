@@ -3,7 +3,7 @@
 {% block content %}
 
 
-<h2> Transaction page of Mr. {{request.user}} </h2>
+<h2> {{request.user.account.long_name}} </h2>
 <br>
 {% if user_group == 'pioner' %}
 <h3> Your current balance is {{request.user.account.balance}} @</h3>
@@ -15,20 +15,29 @@
 {% if in_trans %}
 <p>And here is last transactions to your account</p>
 
-<table>
+<table class="trans_table">
     <tr>
 
-        <td>Сумма</td>
-        <td>Описание</td>
-        <td>Тип</td>
+        <th>Дата</th>
+        <th>Тип</th>
+        <th>Сумма</th>
+        <th>Автор</th>
+        <th>Описание</th>
 
 
     </tr>
     {% for t in in_trans %}
     <tr>
-        <td>{{t.value}}</td>
-        <td>{{t.description}}</td>
+        <td>{{t.creation_date}}</td>
         <td>{{t.type}}</td>
+
+        <td>{% if t.value > 0 %}
+            +
+            {% endif %}
+            {{t.value}}@
+        </td>
+        <td>{{t.creator.account}}</td>
+        <td>{{t.description}}</td>
     </tr>
     {% endfor %}
 </table>
@@ -43,21 +52,27 @@
 
 <table class="trans_table">
     <tr>
-        <td>ФИ получателя
-        <td>
-        <td>Сумма</td>
-        <td>Описание</td>
-        <td>Тип</td>
+
+        <th>Дата</th>
+        <th>Тип</th>
+        <th>Сумма</th>
+        <th>Получатель</th>
+        <th>Описание</th>
 
 
     </tr>
     {% for t in out_trans %}
     <tr>
-        <td>{{t.recipient}}
-        <td>
-        <td>{{t.value}}</td>
-        <td>{{t.description}}</td>
+        <td>{{t.creation_date}}</td>
         <td>{{t.type}}</td>
+
+        <td>{% if t.value > 0 %}
+            +
+            {% endif %}
+            {{t.value}}@
+        </td>
+        <td>{{t.recipient.account}}</td>
+        <td>{{t.description}}</td>
     </tr>
     {% endfor %}
 </table>

@@ -13,7 +13,8 @@
             <td><h1><a class="head_link" href={% url 'bank:index' %}> LFMSH Banking Systems </a></h1></td>
 
             {% if request.user.is_authenticated %}
-            <td><p class="log_info"> You are logged in as {{request.user.username}} </p></td>
+            <td><p class="log_info"> You are logged in as {{request.user.first_name}} {{request.user.last_name}} </p>
+            </td>
             {%else%}
             <td><p class="log_info"> You are not logged in </p></td>
             {%endif%}

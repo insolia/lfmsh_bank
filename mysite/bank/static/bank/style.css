@@ -13,7 +13,7 @@
         padding:5px;
         }
 #section {
-        width:350px;
+        width:100%;
         float:left;
         padding:10px;
         }
@@ -42,7 +42,7 @@ a.head_link:link{
         text-decoration: none;
         }
     a.head_link:hover{
-        color: green;
+        color: #4CAF50;
         background-color: transparent;
         text-decoration: underline;
         }
@@ -51,7 +51,19 @@ a.head_link:link{
         text-align:right}
 
 .trans_table{
-
+    width: 100%;
     border: 1px solid black;
 
+    border-collapse: collapse;
+}
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+tr:nth-child(even){
+background-color: #f2f2f2
+}
+th, td {
+    text-align: left;
+    padding: 2px;
 }
