@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<h1> Hello Mr.  {{request.user.first_name}}</h1>
+<h1> {{request.user.account.long_name}}</h1>
 
 
 {% if user_group == 'pioner' %}
