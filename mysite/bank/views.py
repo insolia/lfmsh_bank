@@ -22,9 +22,11 @@ def index(request):
     if not request.user.is_authenticated():
         return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
 
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
+    print request.user.account.can_add_trans()
 
-    return render(request, 'bank/index.html', {'user_group': user_group_name})
+    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
+    print user_group_name
+    return render(request, 'bank/indexx.html', {'user_group': user_group_name})
 
 
 class all_accounts_view(generic.ListView):
@@ -35,15 +37,21 @@ class all_accounts_view(generic.ListView):
         return Account.objects.filter(user__groups__name='pioner').order_by('-balance')
 
 
+def all_ped_accounts(request):
+    template_name = 'bank/show_all_ped.html'
+    accounts = Account.objects.filter(user__groups__name='pedsostav').order_by('-balance')
+    return render(request, template_name, {'accounts': accounts})
+
+
 def show_my_trans(request):
     if not request.user.is_authenticated():
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-    in_trans = Transaction.objects.filter(recipient=request.user).order_by('-last_modified_date')
-    out_trans = Transaction.objects.filter(creator=request.user).order_by('-last_modified_date')
+    in_trans = Transaction.objects.filter(recipient=request.user).order_by('-creation_date')
+    out_trans = Transaction.objects.filter(creator=request.user).order_by('-creation_date')
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
 
-    return render(request, 'bank/trans_list.html',
+    return render(request, 'bank/trans_my_list.html',
                   {'in_trans': in_trans, 'out_trans': out_trans, 'user_group': user_group_name})
 
 
@@ -68,7 +76,7 @@ def add_special(request):
             type = TransactionType.objects.get(name='Other')
 
             new_trans = Transaction(recipient=recipient, value=value, creator=creator, description=description,
-                                    type=type, status='CO')
+                                    type=type, status='PR')
 
             new_trans.count()
 
@@ -107,7 +115,7 @@ def add_zaryadka(request):
         new_transactions = []
         for u in zar_attendants:
             new_trans = Transaction(recipient=u, value=value, creator=creator, description=description,
-                                    type=type, status='CO')
+                                    type=type, status='PR')
             new_trans.count()
             new_transactions.append(new_trans)
 
@@ -147,7 +155,7 @@ def add_sem(request):
             type = TransactionType.objects.get(name='Seminar')
 
             new_trans = Transaction(recipient=recipient, value=value, creator=creator, description=description,
-                                    type=type)
+                                    type=type, status='PR')
 
             new_trans.count()
 
@@ -159,4 +167,64 @@ def add_sem(request):
 
         form = SeminarTransForm()
         return render(request, 'bank/trans_add_seminar.html', {'form': form})
+
+
+def dec_trans(request, trans_id):
+    print 'decline page'
+    if not request.user.is_authenticated():
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
+
+    trans = Transaction.objects.get(pk=trans_id)
+    if trans.creator != request.user and user_group_name != 'admin':
+        return redirect(reverse('bank:index'))
+
+    return render(request, 'bank/trans_dec_confirm.html', {'t': trans})
+
+
+def dec_trans_ok(request, trans_id):
+    if not request.user.is_authenticated():
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
+    trans = Transaction.objects.get(pk=trans_id)
+    if trans.creator != request.user and user_group_name != 'admin':
+        return redirect(reverse('bank:index'))
+
+    if request.method == "POST":
+
+        # decline of trans happening
+        trans.cancel()
+        if user_group_name == 'admin':
+            trans.status = 'DA'
+        else:
+            trans.status = 'DC'
+        trans.save()
+
+
+
+    else:
+        return redirect(reverse('bank:index'))
+
+    return render(request, 'bank/trans_dec_ok.html', {'transactions': [trans]})
+
+
+def trans_list(request, username):
+    if not request.user.is_authenticated():
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
+    if user_group_name != 'admin':
+        return redirect(reverse('bank:index'))
+
+    t_user = User.objects.get(username=username)
+
+    in_trans = Transaction.objects.filter(recipient=t_user).order_by('-last_modified_date')
+    print(in_trans)
+    out_trans = Transaction.objects.filter(creator=t_user).order_by('-last_modified_date')
+
+    return render(request, 'bank/trans_list.html',
+                  {'in_trans': in_trans, 'out_trans': out_trans, 'user_group': user_group_name, 'user': t_user})
+
 

@@ -1,0 +1,36 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+<p>Your transactions was successfully declined!</p>
+<p>Changed balance</p>
+
+<table class='table table-striped' , id="trans_ok_table">
+    <tr>
+        <th>ФИО Пионера</th>
+        <th>Поступление</th>
+        <th>Сумма</th>
+    </tr>
+
+    {% for a in transactions %}
+    <tr>
+        <td>{{a.recipient.first_name}} {{a.recipient.last_name}}</td>
+        <td>{% if a.value < 0 %}+
+            {% endif %}
+            -{{ a.value }}@
+        </td>
+        <td>{{a.recipient.account.balance}}@</td>
+    </tr>
+
+    {% endfor %}
+
+
+</table>
+
+
+<br>
+<a href="{% url 'bank:all_acc' %}"> See list of all pioners</a>
+<br>
+<a href="{% url 'bank:index' %}"> Home page</a>
+
+{% endblock %}

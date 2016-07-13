@@ -1,0 +1,64 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+{% load staticfiles %}
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0">
+        <div class="text-left">
+            <h3> Здравствуйте, {{request.user.account.long_name}}</h3>
+        </div>
+    </div>
+</div>
+
+
+{% if user_group == 'pioner' %}
+
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0">
+        <div class="text-left">
+            <h3> Your current balance is {{request.user.account.balance}} @</h3>
+        </div>
+    </div>
+</div>
+
+
+{%endif%}
+
+
+<p>Here is your options:</p>
+<br>
+<a href="{% url 'bank:my_trans' %}"> Show my transactions</a>
+
+
+{% if user_group == 'admin' %}
+<br>
+<a href="{% url 'bank:all_acc' %}"> Show all pioners with balances </a>
+<br>
+<a href="{% url 'bank:all_acc_ped' %}"> Show all pedsostav with spendings </a>
+<br>
+{%endif%}
+{% if user.account.can_add_trans %}
+
+<p>Add transaction forms:</p>
+
+<a href="{% url 'bank:add_sem' %}"> Seminar </a>
+<br>
+
+<a href="{% url 'bank:add_special' %}"> Special </a>
+<br>
+
+<a href="{% url 'bank:add_zaryadka' %}"> Zaryadka </a>
+
+{%endif%}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+
+<script src="{% static 'bank/js/bootstrap.min.js' %}"></script>
+
+
+{% endblock %}

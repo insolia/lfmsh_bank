@@ -32,6 +32,19 @@ class Account(models.Model):
     def long_name(self):
         return self.user.last_name + ' ' + self.user.first_name + ' ' + self.third_name
 
+    def short_name(self):
+        if self.user.first_name:
+
+            return self.user.last_name + ' ' + self.user.first_name[0] + '. ' + self.third_name[0] + '.'
+        else:
+            return self.user.last_name
+
+
+    def can_add_trans(self):
+        if self.user.groups.filter(name__in=['pedsostav', 'admin']):
+            return True
+        return False
+
 
 class TransactionType(models.Model):
     name = models.CharField(max_length=30)
@@ -68,7 +81,7 @@ class Transaction(models.Model):
     type = models.ForeignKey(TransactionType)
 
     modifier = models.ForeignKey(User, blank=True, null=True, related_name='modified_trans')
-    last_modified_date = models.DateTimeField(auto_now=True, null=True)
+    last_modified_date = models.DateTimeField(blank=True, null=True)
 
 
     def __unicode__(self):
@@ -102,4 +115,10 @@ class Transaction(models.Model):
 
         self.counted = False
         self.save()
+        return True
+
+
+    def can_be_declined(self):
+        if self.status in ['DA', 'DC']:
+            return False
         return True

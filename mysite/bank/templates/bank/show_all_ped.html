@@ -4,8 +4,8 @@
 
 <table class='table table-striped'>
     <tr>
-        <th>Пионер</th>
-        <th>Деньги</th>
+        <th>Педсостав</th>
+        <th>Расходы</th>
         <th>Транзакции</th>
 
 
@@ -14,10 +14,12 @@
     <tr>
         <td>{{u}}</td>
         <td>{{u.balance}}</td>
-
-        <td><a class="btn btn-info" href="{% url 'bank:trans_list' u.user.username %}" role="button">Транзакции</a>
+        <td>
+            <a class="btn btn-info" href="{% url 'bank:trans_list' u.user.username %}" role="button">Транзакции</a>
+            </a>
         </td>
     </tr>
+
     {% endfor %}
 </table>
 
