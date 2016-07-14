@@ -41,7 +41,7 @@
 <form>
     {% csrf_token %}
     <button type="submit" class="btn btn-info" formaction="{% url 'bank:trans_dec_ok' t.pk %} " formmethod="POST">
-        Отклонить транзакцию
+        Отменить транзакцию
     </button>
 </form>
 

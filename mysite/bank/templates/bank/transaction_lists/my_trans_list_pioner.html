@@ -1,0 +1,121 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+
+<h2>Здравствуйте, {{request.user.account.long_name}} </h2>
+<br>
+<h3> Ваш баланс: {{request.user.account.balance}} @</h3>
+
+<br>
+
+{% if in_trans %}
+<h4> Ваши входящие транзакции</h4>
+
+<table class="table">
+    <tr>
+
+        <th>Дата</th>
+        <th>Сумма</th>
+        <th>Автор</th>
+        <th>Тип</th>
+        <th>Описание</th>
+
+
+    </tr>
+    {% for t in in_trans %}
+
+    {% if t.status.name = 'PR' %}
+    <tr class="success">
+        {% endif %}
+
+        {% if t.status.name = 'AD' %}
+    <tr class="warning">
+        {% endif %}
+
+        {% if t.status.name = 'DA' or t.status.name = 'DC' %}
+    <tr class="danger">
+        {% endif %}
+
+        <td>{{t.get_creation_date}}</td>
+
+        <td>{% if t.value > 0 %}
+            +
+            {% endif %}
+            {{t.value}}@
+        </td>
+        <td>{{t.creator.account}}</td>
+        <td>{{t.type}}</td>
+
+        <td>{{t.description}}</td>
+    </tr>
+
+
+    {% endfor %}
+</table>
+
+
+{% else %}
+<p>Нет входящих транзакций</p>
+{% endif %}
+
+{% if out_trans %}
+
+<h4>Ваши транзакции</h4>
+
+<table class="table table-striped">
+    <tr>
+
+        <th>Дата</th>
+        <th>Сумма</th>
+        <th>Получатель</th>
+        <th>Описание</th>
+        <th>Отмена</th>
+
+
+    </tr>
+    {% for t in out_trans %}
+
+    {% if t.status.name == 'AD' %}
+    <tr class="warning">
+        {% endif%}
+
+
+        {% if t.status.name = 'DA' or t.status.name = 'DC' %}
+    <tr class="danger">
+        {% endif%}
+
+
+        {% if t.status.name = 'PR' %}
+    <tr class="success">
+        {% endif%}
+
+        <td>{{t.get_creation_date}}</td>
+
+        <td>{% if t.value > 0 %}
+            +
+            {% endif %}
+            {{t.value}}@
+        </td>
+        <td>{{t.recipient.account}}</td>
+
+        <td>{{t.description}}</td>
+        <td>
+            {% if t.can_be_declined %}
+            <a class="btn btn-info" href="{% url 'bank:trans_dec' t.pk %}" role="button">Отменить</a>
+            {% else %}
+            <p> Нельзя отменить</p>
+        </td>
+    </tr>
+    {% endif %}
+
+
+    {% endfor %}
+</table>
+
+
+{% else %}
+<p>У Вас нет исходящих транзакций.</p>
+{% endif %}
+
+{% endblock %}
