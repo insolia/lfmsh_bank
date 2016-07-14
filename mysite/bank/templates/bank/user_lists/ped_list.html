@@ -2,21 +2,20 @@
 
 {% block content %}
 
+<p>Нажмите на фамилию для просмотра транзакций</p>
 <table class='table table-striped'>
     <tr>
         <th>Педсостав</th>
         <th>Расходы</th>
-        <th>Транзакции</th>
 
 
     </tr>
     {% for u in accounts %}
     <tr>
-        <td>{{u}}</td>
+        <td><a class="link" href="{% url 'bank:trans_list' u.user.username %}">{{u}}</a></td>
+
         <td>{{u.balance}}</td>
-        <td>
-            <a class="btn btn-info" href="{% url 'bank:trans_list' u.user.username %}" role="button">Транзакции</a>
-            </a>
+
         </td>
     </tr>
 

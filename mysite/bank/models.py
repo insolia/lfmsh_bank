@@ -48,11 +48,23 @@ class Account(models.Model):
 
 class TransactionType(models.Model):
     name = models.CharField(max_length=30)
+    human_name = models.CharField(max_length=30, default='Other')
     group1 = models.CharField(max_length=30, blank=True, null=True)
     group2 = models.CharField(max_length=30, blank=True, null=True)
 
     def __unicode__(self):
-        return self.name
+        return self.human_name
+
+
+class TransactionStatus(models.Model):
+    name = models.CharField(max_length=30)
+    human_name = models.CharField(max_length=30)
+    counted = models.BooleanField(default=False)
+    group1 = models.CharField(max_length=30, blank=True, null=True)
+    group2 = models.CharField(max_length=30, blank=True, null=True)
+
+    def __unicode__(self):
+        return self.human_name
 
 
 class Transaction(models.Model):
@@ -64,21 +76,10 @@ class Transaction(models.Model):
     description = models.TextField(max_length=400, blank=True)
     value = models.IntegerField(default=0)
 
-    STATUS_CHOICES = (
-        ('AD', 'Added'),
-        ('CO', 'Confirmed'),
-        ('PR', 'Processed'),
-        ('DC', 'Creator declined'),
-        ('DA', 'Admin declined')
-    )
-
     counted = models.BooleanField(default=False, editable=False)
-    status = models.CharField(
-        max_length=2,
-        choices=STATUS_CHOICES,
-        default='AD')
 
     type = models.ForeignKey(TransactionType)
+    status = models.ForeignKey(TransactionStatus)
 
     modifier = models.ForeignKey(User, blank=True, null=True, related_name='modified_trans')
     last_modified_date = models.DateTimeField(blank=True, null=True)
@@ -119,6 +120,9 @@ class Transaction(models.Model):
 
 
     def can_be_declined(self):
-        if self.status in ['DA', 'DC']:
+        if self.status.name in ['DA', 'DC']:
             return False
         return True
+
+    def get_creation_date(self):
+        return self.creation_date.strftime("%d.%m.%Y %H:%M")

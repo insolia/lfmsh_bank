@@ -3,47 +3,14 @@
 {% block content %}
 
 
-<h2> {{request.user.account.long_name}} </h2>
-<br>
-{% if user_group == 'pioner' %}
-<h3> Your current balance is {{request.user.account.balance}} @</h3>
-{%endif%}
+<h2> {{user.account.long_name}} </h2>
+<h2> Страница транзакций </h2>
 
 <br>
 
-{% if user_group == 'pioner' %}
+
 {% if in_trans %}
-<h4> Ваши входящие транзакции</h4>
-
-<table class="table table-striped">
-    <tr>
-
-        <th>Дата</th>
-        <th>Тип</th>
-        <th>Сумма</th>
-        <th>Автор</th>
-        <th>Описание</th>
-
-
-    </tr>
-    {% for t in in_trans %}
-    {% if t.status = 'PR' %}
-    <tr>
-        <td>{{t.creation_date}}</td>
-        <td>{{t.type}}</td>
-
-        <td>{% if t.value > 0 %}
-            +
-            {% endif %}
-            {{t.value}}@
-        </td>
-        <td>{{t.creator.account}}</td>
-        <td>{{t.description}}</td>
-    </tr>
-    {% endif %}
-    {% endfor %}
-</table>
-<h4>Отклоненные и не подтвержденные транзакции (не влияют на баланс)</h4>
+<h3> Входящие</h3>
 
 <table class="table table-striped">
     <tr>
@@ -54,13 +21,13 @@
         <th>Автор</th>
         <th>Статус</th>
         <th>Описание</th>
+        <th>Отмена</th>
 
 
     </tr>
     {% for t in in_trans %}
-    {% if t.status != 'PR' %}
     <tr>
-        <td>{{t.creation_date}}</td>
+        <td>{{t.get_creation_date}}</td>
         <td>{{t.type}}</td>
 
         <td>{% if t.value > 0 %}
@@ -72,20 +39,21 @@
         <td>{{t.status}}</td>
 
         <td>{{t.description}}</td>
+        <td>
+            {% if t.can_be_declined %}
+            <a class="btn btn-info" href="{% url 'bank:trans_dec' t.pk %}" role="button">Отклонить</a>
+            {% else %}
+            <p> Нельзя отклонить</p>
+            {% endif %}
+        </td>
     </tr>
-    {% endif %}
     {% endfor %}
 </table>
-
-
-{% else %}
-<p>Нет входящих транзакций</p>
-{% endif %}
 {% endif %}
 
 {% if out_trans %}
 
-<h4>Транзакции сделанные вами</h4>
+<h3>Исходящие</h3>
 
 <table class="table table-striped">
     <tr>
@@ -125,7 +93,7 @@
     {% endfor %}
 </table>
 {% else %}
-<p>У вас нет исходящих транзакций.</p>
+<p>Нет исходящих транзакций</p>
 {% endif %}
 
 {% endblock %}

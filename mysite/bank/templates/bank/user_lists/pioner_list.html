@@ -1,0 +1,84 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+<p>Нажмите на фамилию для просмотра транзакций</p>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Первый отряд
+    </div>
+<table class='table table-striped'>
+    <tr>
+        <th>Пионер</th>
+        <th>Деньги</th>
+    </tr>
+    {% for u in accounts.1 %}
+    <tr>
+        <td><a class="link" href="{% url 'bank:trans_list' u.user.username %}">{{u}}</a>
+        </td>
+        <td>{{u.balance}}@</td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Второй отряд
+    </div>
+    <table class='table table-striped'>
+        <tr>
+            <th>Пионер</th>
+            <th>Деньги</th>
+        </tr>
+        {% for u in accounts.2 %}
+        <tr>
+            <td><a class="link" href="{% url 'bank:trans_list' u.user.username %}">{{u}}</a>
+            </td>
+            <td>{{u.balance}}@</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Третий отряд
+    </div>
+    <table class='table table-striped'>
+        <tr>
+            <th>Пионер</th>
+            <th>Деньги</th>
+    </tr>
+        {% for u in accounts.3 %}
+    <tr>
+        <td><a class="link" href="{% url 'bank:trans_list' u.user.username %}">{{u}}</a>
+        </td>
+        <td>{{u.balance}}@</td>
+    </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Четвертый отряд
+    </div>
+    <table class='table table-striped'>
+        <tr>
+            <th>Пионер</th>
+            <th>Деньги</th>
+        </tr>
+        {% for u in accounts.4 %}
+        <tr>
+            <td><a class="link" href="{% url 'bank:trans_list' u.user.username %}">{{u}}</a>
+        </td>
+            <td>{{u.balance}}@</td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+
+
+{% endblock %}

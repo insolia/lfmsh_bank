@@ -1,0 +1,94 @@
+{% extends "bank/base.html" %}
+
+{% block content %}
+
+
+<form action={% url 'bank:add_zaryadka' %} method="post">
+{% csrf_token %}
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Первый отряд
+    </div>
+<table class='table table-striped' id="trans_add_table">
+
+        <tr>
+            <th>ФИО Пионера</th>
+            <th>Сходил на зарядку</th>
+        </tr>
+    {% for u in users.1 %}
+    <tr>
+        <td>{{u.account.long_name}}</td>
+        <td><input type="checkbox" name="{{u.username}}_check" value='0'></td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Второй отряд
+    </div>
+    <table class='table table-striped'>
+
+        <tr>
+            <th>ФИО Пионера</th>
+            <th>Сходил на зарядку</th>
+        </tr>
+        {% for u in users.2 %}
+        <tr>
+            <td>{{u.account.long_name}}</td>
+            <td><input type="checkbox" name="{{u.username}}_check" value='0'></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Третий отряд
+    </div>
+    <table class='table table-striped'>
+
+        <tr>
+            <th>ФИО Пионера</th>
+            <th>Сходил на зарядку</th>
+        </tr>
+        {% for u in users.3 %}
+        <tr>
+            <td>{{u.account.long_name}}</td>
+            <td><input type="checkbox" name="{{u.username}}_check" value='0'></td>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Четвертый отряд
+    </div>
+    <table class='table table-striped'>
+
+        <tr>
+            <th>ФИО Пионера</th>
+            <th>Сходил на зарядку</th>
+        </tr>
+        {% for u in users.4 %}
+        <tr>
+            <td>{{u.account.long_name}}</td>
+            <td><input type="checkbox" name="{{u.username}}_check" value='0'></td>
+        </tr>
+        {% endfor %}
+</table>
+</div>
+
+<p>Можете написать здесь что нибудь мотивирующее для этих ребят</p>
+<textarea name="description" rows="5" cols="50">
+</textarea>
+<br>
+
+<input type="submit" value="Make transactions" />
+
+</form>
+
+
+{% endblock %}

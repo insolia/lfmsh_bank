@@ -27,29 +27,31 @@
 {%endif%}
 
 
-<p>Here is your options:</p>
+<p>Вы можете</p>
 <br>
-<a href="{% url 'bank:my_trans' %}"> Show my transactions</a>
+<a href="{% url 'bank:my_trans' %}"> Посмотреть свои транзакции</a>
 
 
 {% if user_group == 'admin' %}
 <br>
-<a href="{% url 'bank:all_acc' %}"> Show all pioners with balances </a>
+<a href="{% url 'bank:all_acc' %}"> Посмотреть список пионеров с балансом</a>
 <br>
-<a href="{% url 'bank:all_acc_ped' %}"> Show all pedsostav with spendings </a>
+<a href="{% url 'bank:all_acc_ped' %}"> Посмотреть список педсостава</a>
 <br>
 {%endif%}
 {% if user.account.can_add_trans %}
-
-<p>Add transaction forms:</p>
-
-<a href="{% url 'bank:add_sem' %}"> Seminar </a>
 <br>
 
-<a href="{% url 'bank:add_special' %}"> Special </a>
+<p>Добавить транзакции</p>
+
+<a href="{% url 'bank:add_sem' %}"> Семинар </a>
+<br>
+<a href="{% url 'bank:add_zaryadka' %}"> Зарядка </a>
 <br>
 
-<a href="{% url 'bank:add_zaryadka' %}"> Zaryadka </a>
+<a href="{% url 'bank:add_special' %}"> Специальная </a>
+
+
 
 {%endif%}
 
