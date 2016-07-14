@@ -48,7 +48,8 @@ def all_ped_accounts(request):
 
 def show_my_trans(request):
     if not request.user.is_authenticated():
-        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
+
 
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
 
@@ -66,7 +67,7 @@ def show_my_trans(request):
 
 def add_special(request):
     if not request.user.is_authenticated():
-        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
 
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
 
@@ -102,7 +103,7 @@ def add_special(request):
 
 def add_zaryadka(request):
     if not request.user.is_authenticated():
-        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
 
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
 
@@ -151,7 +152,7 @@ def add_zaryadka(request):
 
 def add_sem(request):
     if not request.user.is_authenticated():
-        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
 
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
 
@@ -190,7 +191,7 @@ def add_sem(request):
 def dec_trans(request, trans_id):
     print 'decline page'
     if not request.user.is_authenticated():
-        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
 
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
 
@@ -203,7 +204,7 @@ def dec_trans(request, trans_id):
 
 def dec_trans_ok(request, trans_id):
     if not request.user.is_authenticated():
-        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
 
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
     trans = Transaction.objects.get(pk=trans_id)
@@ -232,7 +233,7 @@ def dec_trans_ok(request, trans_id):
 
 def trans_list(request, username):
     if not request.user.is_authenticated():
-        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
 
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
     if user_group_name != 'admin':
