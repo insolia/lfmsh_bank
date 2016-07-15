@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 class Account(models.Model):
     '''
-    Extention of a user class
+    Extension of a user class
     '''
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
@@ -38,7 +38,6 @@ class Account(models.Model):
             return self.user.last_name + ' ' + self.user.first_name[0] + '. ' + self.third_name[0] + '.'
         else:
             return self.user.last_name
-
 
     def can_add_trans(self):
         if self.user.groups.filter(name__in=['pedsostav', 'admin']):
@@ -88,6 +87,33 @@ class Transaction(models.Model):
     def __unicode__(self):
         return self.recipient.username + " " + str(self.value)
 
+    @classmethod
+    def create_trans(cls, recipient, value, creator, description, type, status):
+
+        if 'pioner' in creator.groups.filter(name__in=['pioner']) and type.name != 'p2p':
+            raise StandardError('While creating transaction. Pioner tried to create not p2p trans ')
+
+        new_trans = cls(recipient=recipient, value=value, creator=creator, description=description,
+                        type=type, status=status)
+
+        if status.name == 'PR':
+            new_trans.count()
+        else:
+            new_trans.save()
+
+        if type.name == 'fac_pass':
+            a = new_trans.recipient.account
+            a.fac_passed += 1
+            a.save()
+
+        if type.name == 'lab_pass':
+            a = new_trans.recipient.account
+            a.lab_passed += 1
+            a.save()
+
+        return new_trans
+
+
     def count(self):
 
         if self.counted:
@@ -97,7 +123,9 @@ class Transaction(models.Model):
         a.balance = a.balance + self.value
         a.save()
 
-        # here should be if type = p2p: creator balance substract
+        a = self.creator.account
+        a.balance = a.balance - self.value
+        a.save()
 
         self.counted = True
         self.save()
@@ -112,7 +140,9 @@ class Transaction(models.Model):
         a.balance = a.balance - self.value
         a.save()
 
-        # here should be if type = p2p: creator balance add
+        a = self.creator.account
+        a.balance = a.balance + self.value
+        a.save()
 
         self.counted = False
         self.save()

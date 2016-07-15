@@ -86,10 +86,9 @@ def add_special(request):
             type = TransactionType.objects.get(name='Other')
             status = TransactionStatus.objects.get(name='PR')
 
-            new_trans = Transaction(recipient=recipient, value=value, creator=creator, description=description,
+            new_trans = Transaction.create_trans(recipient=recipient, value=value, creator=creator,
+                                                 description=description,
                                     type=type, status=status)
-
-            new_trans.count()
 
             return render(request, 'bank/add_trans/trans_add_ok.html', {'transactions': [new_trans]})
         return render(request, 'bank/add_trans/trans_add_special.html', {'form': form})
@@ -129,9 +128,8 @@ def add_zaryadka(request):
 
         new_transactions = []
         for u in zar_attendants:
-            new_trans = Transaction(recipient=u, value=value, creator=creator, description=description,
+            new_trans = Transaction.create_trans(recipient=u, value=value, creator=creator, description=description,
                                     type=type, status=status)
-            new_trans.count()
             new_transactions.append(new_trans)
 
         if new_transactions:
@@ -166,6 +164,7 @@ def add_sem(request):
             score = form.cleaned_data['score']
 
             value = hf.seminar(score)
+
             recipient = form.cleaned_data['recipient'].user
             description = form.cleaned_data['description']
             creator = request.user
@@ -173,10 +172,9 @@ def add_sem(request):
             type = TransactionType.objects.get(name='Seminar')
             status = TransactionStatus.objects.get(name='PR')
 
-            new_trans = Transaction(recipient=recipient, value=value, creator=creator, description=description,
+            new_trans = Transaction.create_trans(recipient=recipient, value=value, creator=creator,
+                                                 description=description,
                                     type=type, status=status)
-
-            new_trans.count()
 
             return render(request, 'bank/add_trans/trans_add_ok.html', {'transactions': [new_trans]})
         return render(request, 'bank/add_trans/trans_add_seminar.html', {'form': form})
@@ -215,7 +213,9 @@ def dec_trans_ok(request, trans_id):
 
         # decline of trans happening
         trans.cancel()
+
         if user_group_name == 'admin':
+
             trans.status = TransactionStatus.objects.get(name='DA')
 
         else:
