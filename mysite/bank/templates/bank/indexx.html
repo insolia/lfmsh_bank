@@ -26,10 +26,18 @@
 
 {%endif%}
 
+<br>
 
-<p>Вы можете</p>
 <br>
 <a href="{% url 'bank:my_trans' %}"> Посмотреть свои транзакции</a>
+<br>
+
+{% if user_group == 'pioner' %}
+<br>
+<a href="{% url 'bank:add_p2p' %}"> Подать заявку на личный перевод</a>
+{%endif%}
+
+
 
 
 {% if user_group == 'admin' %}
@@ -38,7 +46,10 @@
 <br>
 <a href="{% url 'bank:all_acc_ped' %}"> Посмотреть список педсостава</a>
 <br>
+<a href="{% url 'bank:manage_p2p' %}"> Разобрать пионерские личные транзакции</a> ({{ unm_len }})
+<br>
 {%endif%}
+
 {% if user.account.can_add_trans %}
 <br>
 

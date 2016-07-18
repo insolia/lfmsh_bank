@@ -70,7 +70,7 @@
     </tr>
     {% for t in out_trans %}
     <tr>
-        <td>{{t.creation_date}}</td>
+        <td>{{t.get_creation_date}}</td>
         <td>{{t.type}}</td>
 
         <td>{% if t.value > 0 %}

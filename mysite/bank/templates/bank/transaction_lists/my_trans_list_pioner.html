@@ -33,9 +33,9 @@
     <tr class="warning">
         {% endif %}
 
-        {% if t.status.name = 'DA' or t.status.name = 'DC' %}
-    <tr class="danger">
-        {% endif %}
+        {% if t.status.name != 'DA' and t.status.name != 'DC' %}
+
+
 
         <td>{{t.get_creation_date}}</td>
 
@@ -50,7 +50,7 @@
         <td>{{t.description}}</td>
     </tr>
 
-
+    {% endif %}
     {% endfor %}
 </table>
 
@@ -81,9 +81,9 @@
         {% endif%}
 
 
-        {% if t.status.name = 'DA' or t.status.name = 'DC' %}
-    <tr class="danger">
-        {% endif%}
+        {% if t.status.name != 'DA' and t.status.name != 'DC' %}
+
+
 
 
         {% if t.status.name = 'PR' %}
@@ -108,7 +108,7 @@
         </td>
     </tr>
     {% endif %}
-
+    {% endif%}
 
     {% endfor %}
 </table>

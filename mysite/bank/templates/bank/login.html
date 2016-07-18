@@ -1,10 +1,10 @@
 {% extends "bank/base.html" %}
 
 {% block content %}
+{% load bootstrap3 %}
 
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
+
+
 
 {% if next %}
     {% if user.is_authenticated %}
@@ -14,23 +14,20 @@
     <p>Please login to see this page.</p>
     {% endif %}
 {% endif %}
+<div class="container">
 
-<form method="post" action="{% url 'bank:login' %}">
+<form method="post" action="{% url 'bank:login' %}" class="form-signin">
+
+    <h2 class="form-signin-heading">Please sign in</h2>
+
 {% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
+    {% bootstrap_form form %}
+    {% buttons submit='OK' reset="Cancel" href="{{next}}"  %}{% endbuttons %}
 
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="{{ next }}" />
+    <input type="hidden" name="next" link="{{ next }}" />
 </form>
+    </div>
+
 
 
 {% endblock %}

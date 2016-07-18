@@ -152,6 +152,8 @@ class Transaction(models.Model):
     def can_be_declined(self):
         if self.status.name in ['DA', 'DC']:
             return False
+        if self.type.name == 'p2p' and self.status.name == 'PR':
+            return False
         return True
 
     def get_creation_date(self):

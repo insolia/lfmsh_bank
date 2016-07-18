@@ -9,7 +9,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.views import logout_then_login
 from django.views import generic
 from django.core.urlresolvers import reverse
-from .forms import SprecialTransForm, SeminarTransForm
+from .forms import *
 from django.utils import timezone
 import helper_functions as hf
 
@@ -25,8 +25,9 @@ def index(request):
     print request.user.account.can_add_trans()
 
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
+    p2p_unmanaged_len = len(Transaction.objects.filter(status__name='AD'))
     print user_group_name
-    return render(request, 'bank/indexx.html', {'user_group': user_group_name})
+    return render(request, 'bank/indexx.html', {'user_group': user_group_name,'unm_len':p2p_unmanaged_len})
 
 
 def all_pioner_accounts(request):
@@ -39,6 +40,7 @@ def all_pioner_accounts(request):
     accounts['4'] = Account.objects.filter(user__groups__name='pioner').filter(otr=4)
 
     return render(request, template_name, {'accounts': accounts})
+
 
 def all_ped_accounts(request):
     template_name = 'bank/user_lists/ped_list.html'
@@ -110,6 +112,10 @@ def add_zaryadka(request):
         return redirect(reverse('bank:index'))
 
     if request.method == "POST":
+        print request.POST
+        if len(request.POST) < 3:
+            return redirect(reverse('bank:index'))
+
 
         zar_attendants = []
 
@@ -186,6 +192,43 @@ def add_sem(request):
         return render(request, 'bank/add_trans/trans_add_seminar.html', {'form': form})
 
 
+def add_p2p(request):
+    if not request.user.is_authenticated():
+        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
+
+    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
+
+    if user_group_name != 'pioner':
+        return redirect(reverse('bank:index'))
+
+    if request.method == "POST":
+
+        form = P2PTransForm(request.POST)
+        if form.is_valid():
+            value = form.cleaned_data['value']
+            recipient = form.cleaned_data['recipient'].user
+            description = form.cleaned_data['description']
+            creator = request.user
+
+            type = TransactionType.objects.get(name='p2p')
+            status = TransactionStatus.objects.get(name='AD')
+
+            new_trans = Transaction.create_trans(recipient=recipient, value=value, creator=creator,
+                                                 description=description, type=type, status=status)
+
+            return render(request, 'bank/add_trans/trans_add_ok.html', {'transactions': [new_trans]})
+        return render(request, 'bank/add_trans/trans_add_p2p.html', {'form': form})
+
+
+    else:
+
+        form = P2PTransForm()
+        form.fields['recipient'].queryset = form.fields['recipient'].queryset.exclude(user=request.user)
+
+        return render(request, 'bank/add_trans/trans_add_p2p.html', {'form': form})
+
+
+
 def dec_trans(request, trans_id):
     print 'decline page'
     if not request.user.is_authenticated():
@@ -241,10 +284,49 @@ def trans_list(request, username):
 
     t_user = User.objects.get(username=username)
 
-    in_trans = Transaction.objects.filter(recipient=t_user).order_by('-last_modified_date')
-    out_trans = Transaction.objects.filter(creator=t_user).order_by('-last_modified_date')
+    in_trans = Transaction.objects.filter(recipient=t_user).order_by('-creation_date')
+    out_trans = Transaction.objects.filter(creator=t_user).order_by('-creation_date')
 
     return render(request, 'bank/transaction_lists/admin_trans_list.html',
                   {'in_trans': in_trans, 'out_trans': out_trans, 'user_group': user_group_name, 'user': t_user})
 
+def manage_p2p(request):
+    if not request.user.is_authenticated():
+        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
+
+    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
+
+    if user_group_name != 'admin':
+        return redirect(reverse('bank:index'))
+
+    if request.method == "POST":
+
+        print(request.POST)
+
+        con_trans = []
+        dec_trans = []
+
+        for t in Transaction.objects.filter(status__name='AD'):
+            if str(t.pk) + '_confirm' in request.POST:
+                t.status = TransactionStatus.objects.get(name='PR')
+                t.count()
+
+                con_trans.append(t)
+
+            if str(t.pk) + '_cancel' in request.POST:
+                t.status = TransactionStatus.objects.get(name='DA')
+                t.save()
+                dec_trans.append(t)
+
+
+
+
+
+
+
+
+    trans = Transaction.objects.filter(status__name='AD').order_by('creation_date')
+
+
+    return render(request, 'bank/transaction_lists/admin_p2p_list.html', {'trans': trans})
 
