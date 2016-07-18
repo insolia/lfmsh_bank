@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url
 
 from bank import views
+from helper_functions import PionerAutocomplete
 
 urlpatterns = patterns('',
                        url(r'^$', views.index, name='index'),
@@ -25,5 +26,6 @@ urlpatterns = patterns('',
                        url(r'^trans_list/(?P<username>.+)/$', views.trans_list, name='trans_list'),
                        url(r'manage_p2p', views.manage_p2p, name='manage_p2p'),
 
+                       url(r'^pioner-autocomplete/$', PionerAutocomplete.as_view(), name='pioner-autocomplete'),
                        )
 

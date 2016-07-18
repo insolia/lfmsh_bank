@@ -11,6 +11,7 @@ from django.views import generic
 from django.core.urlresolvers import reverse
 from .forms import *
 from django.utils import timezone
+
 import helper_functions as hf
 
 
@@ -34,10 +35,10 @@ def all_pioner_accounts(request):
     template_name = 'bank/user_lists/pioner_list.html'
 
     accounts = {}
-    accounts['1'] = Account.objects.filter(user__groups__name='pioner').filter(otr=1)
-    accounts['2'] = Account.objects.filter(user__groups__name='pioner').filter(otr=2)
-    accounts['3'] = Account.objects.filter(user__groups__name='pioner').filter(otr=3)
-    accounts['4'] = Account.objects.filter(user__groups__name='pioner').filter(otr=4)
+    accounts['1'] = Account.objects.filter(user__groups__name='pioner').filter(otr=1).order_by('last_name')
+    accounts['2'] = Account.objects.filter(user__groups__name='pioner').filter(otr=2).order_by('last_name')
+    accounts['3'] = Account.objects.filter(user__groups__name='pioner').filter(otr=3).order_by('last_name')
+    accounts['4'] = Account.objects.filter(user__groups__name='pioner').filter(otr=4).order_by('last_name')
 
     return render(request, template_name, {'accounts': accounts})
 
@@ -146,10 +147,10 @@ def add_zaryadka(request):
             return render(request, 'bank/add_trans/trans_add_zaryadka.html', {'users': users})
     else:
         users = {}
-        users['1'] = User.objects.filter(groups__name='pioner').filter(account__otr=1)
-        users['2'] = User.objects.filter(groups__name='pioner').filter(account__otr=2)
-        users['3'] = User.objects.filter(groups__name='pioner').filter(account__otr=3)
-        users['4'] = User.objects.filter(groups__name='pioner').filter(account__otr=4)
+        users['1'] = User.objects.filter(groups__name='pioner').filter(account__otr=1).order_by('last_name')
+        users['2'] = User.objects.filter(groups__name='pioner').filter(account__otr=2).order_by('last_name')
+        users['3'] = User.objects.filter(groups__name='pioner').filter(account__otr=3).order_by('last_name')
+        users['4'] = User.objects.filter(groups__name='pioner').filter(account__otr=4).order_by('last_name')
 
         return render(request, 'bank/add_trans/trans_add_zaryadka.html', {'users': users})
 
@@ -329,4 +330,5 @@ def manage_p2p(request):
 
 
     return render(request, 'bank/transaction_lists/admin_p2p_list.html', {'trans': trans})
+
 
