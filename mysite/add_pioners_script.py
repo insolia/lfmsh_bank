@@ -30,7 +30,7 @@ for p in csv.reader(p_f):
     login = login.lower()
     pd = get_pd(login)
 
-    new_u = User(first_name=fn, last_name=ln, username=login, password=pd)
+    new_u = User.objects.create_user(first_name=fn, last_name=ln, username=login, password=pd)
     new_u.save()
     g.user_set.add(new_u)
     new_a = Account(user=new_u, third_name=tn, grade=grad, otr=otr)

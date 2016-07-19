@@ -50,4 +50,4 @@ class P2PTransForm(forms.Form):
         queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'))
     description = forms.CharField(max_length=400, widget=forms.Textarea)
 
-    value = forms.IntegerField(label='sum', max_value=hf.max_p2p_sum)
+    value = forms.IntegerField(label='sum', min_value=0, max_value=hf.max_p2p_sum)

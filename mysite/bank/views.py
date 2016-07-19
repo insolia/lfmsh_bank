@@ -35,10 +35,10 @@ def all_pioner_accounts(request):
     template_name = 'bank/user_lists/pioner_list.html'
 
     accounts = {}
-    accounts['1'] = Account.objects.filter(user__groups__name='pioner').filter(otr=1).order_by('last_name')
-    accounts['2'] = Account.objects.filter(user__groups__name='pioner').filter(otr=2).order_by('last_name')
-    accounts['3'] = Account.objects.filter(user__groups__name='pioner').filter(otr=3).order_by('last_name')
-    accounts['4'] = Account.objects.filter(user__groups__name='pioner').filter(otr=4).order_by('last_name')
+    accounts['1'] = Account.objects.filter(user__groups__name='pioner').filter(otr=1).order_by('user__last_name')
+    accounts['2'] = Account.objects.filter(user__groups__name='pioner').filter(otr=2).order_by('user__last_name')
+    accounts['3'] = Account.objects.filter(user__groups__name='pioner').filter(otr=3).order_by('user__last_name')
+    accounts['4'] = Account.objects.filter(user__groups__name='pioner').filter(otr=4).order_by('user__last_name')
 
     return render(request, template_name, {'accounts': accounts})
 
@@ -217,7 +217,7 @@ def add_p2p(request):
             new_trans = Transaction.create_trans(recipient=recipient, value=value, creator=creator,
                                                  description=description, type=type, status=status)
 
-            return render(request, 'bank/add_trans/trans_add_ok.html', {'transactions': [new_trans]})
+            return render(request, 'bank/add_trans/trans_add_p2p_ok.html', {'a': new_trans})
         return render(request, 'bank/add_trans/trans_add_p2p.html', {'form': form})
 
 
