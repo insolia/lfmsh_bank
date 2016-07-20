@@ -2,8 +2,10 @@
 
 {% block content %}
 
-<p>Your transactions was successfully declined!</p>
-<p>Changed balance</p>
+<h3>Транзкацкия отменена</h3>
+
+{% if request.user.can_add_trans%}
+<p>Изменения</p>
 
 <table class='table table-striped' , id="trans_ok_table">
     <tr>
@@ -27,7 +29,7 @@
 
 </table>
 
-
+{% endif %}
 <br>
 <a href="{% url 'bank:index' %}"> Home page</a>
 

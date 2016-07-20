@@ -18,9 +18,25 @@
 <div class="row">
     <div class="col-sm-12 col-sm-offset-0">
         <div class="text-left">
-            <h3> Your current balance is {{request.user.account.balance}} @</h3>
+            <h3> Ваш баланс  {{request.user.account.balance}} @</h3>
         </div>
     </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6 ">
+        <div class="text-left">
+            <h5> Вы сделали {{request.user.account.lab_passed}} лаб из {{request.user.account.lab_needed}} необходимых</h5>
+        </div>
+    </div>
+
+     <div class="col-sm-6 ">
+        <div class="text-left">
+            <h5> Вы получили {{request.user.account.fac_passed}} зачетов по факультативу. Надо минимум {{request.user.account.fac_needed}}</h5>
+        </div>
+    </div>
+
+
 </div>
 
 
@@ -60,7 +76,14 @@
 <a href="{% url 'bank:add_zaryadka' %}"> Зарядка </a>
 <br>
 
+<a href="{% url 'bank:add_lab' %}"> Лабораторная работа </a>
+<br>
+
 <a href="{% url 'bank:add_special' %}"> Специальная </a>
+<br>
+
+<a href="{% url 'bank:add_fac' %}"> Зачет за факультатив </a>
+
 
 
 

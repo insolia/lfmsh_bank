@@ -8,6 +8,7 @@
         <form method="POST" class="post-form">
             {% csrf_token %}
             {% bootstrap_form form %}
-            {% buttons submit='OK' reset="Cancel" %}{% endbuttons %}
+
+            {% buttons submit='OK' reset="Отмена" %}{% endbuttons %}
         </form>
     {% endblock %}

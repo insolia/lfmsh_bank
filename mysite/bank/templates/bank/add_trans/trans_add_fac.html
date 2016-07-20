@@ -3,7 +3,7 @@
 {% block content %}
 
 
-<form action={% url 'bank:add_zaryadka' %} method="post">
+<form action={% url 'bank:add_fac' %} method="post">
 {% csrf_token %}
 
 <div class="row">
@@ -16,12 +16,12 @@
 
         <tr>
             <th>ФИО Пионера</th>
-            <th>Сходил на зарядку</th>
+            <th>Деньги за зачет по факультативу</th>
         </tr>
     {% for u in users.1 %}
     <tr>
         <td>{{u.account.long_name}}</td>
-        <td><input type="checkbox" name="{{u.username}}_check" value='0'></td>
+        <td><input type="number" name="{{u.username}}_num"  ></td>
     </tr>
     {% endfor %}
 </table>
@@ -38,12 +38,12 @@
 
         <tr>
             <th>ФИО Пионера</th>
-            <th>Сходил на зарядку</th>
+            <th>Деньги за зачет по факультативу</th>
         </tr>
         {% for u in users.2 %}
         <tr>
             <td>{{u.account.long_name}}</td>
-            <td><input type="checkbox" name="{{u.username}}_check" value='0'></td>
+            <td><input type="number" name="{{u.username}}_num"  ></td>
         </tr>
         {% endfor %}
     </table>
@@ -62,12 +62,12 @@
 
         <tr>
             <th>ФИО Пионера</th>
-            <th>Сходил на зарядку</th>
+            <th>Деньги за зачет по факультативу</th>
         </tr>
         {% for u in users.3 %}
         <tr>
             <td>{{u.account.long_name}}</td>
-            <td><input type="checkbox" name="{{u.username}}_check" value='0'></td>
+            <td><input type="number" name="{{u.username}}_num"></td>
         </tr>
     {% endfor %}
     </table>
@@ -83,12 +83,12 @@
 
         <tr>
             <th>ФИО Пионера</th>
-            <th>Сходил на зарядку</th>
+            <th>Деньги за зачет по факультативу</th>
         </tr>
         {% for u in users.4 %}
         <tr>
             <td>{{u.account.long_name}}</td>
-            <td><input type="checkbox" name="{{u.username}}_check" value='0'></td>
+            <td><input type="number" name="{{u.username}}_num"  ></td>
         </tr>
         {% endfor %}
 </table>

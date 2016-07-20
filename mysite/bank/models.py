@@ -39,6 +39,18 @@ class Account(models.Model):
         else:
             return self.user.last_name
 
+    def lab_needed(self):
+        if self.grade < 9:
+            return 3
+        return 2
+
+    def fac_needed(self):
+        if self.grade < 9:
+            return 0
+        return 1
+
+
+
     def can_add_trans(self):
         if self.user.groups.filter(name__in=['pedsostav', 'admin']):
             return True

@@ -19,6 +19,8 @@ urlpatterns = patterns('',
                        url(r'^add_trans/zaryadka/', views.add_zaryadka, name='add_zaryadka'),
                        url(r'^add_trans/sem/', views.add_sem, name='add_sem'),
                        url(r'^add_trans/p2p/', views.add_p2p, name='add_p2p'),
+                       url(r'^add_trans/fac/', views.add_fac, name='add_fac'),
+                       url(r'^add_trans/lab/', views.add_lab, name='add_lab'),
 
                        url(r'^dec_trans/(?P<trans_id>[0-9]+)/$', views.dec_trans, name='trans_dec'),
                        url(r'^dec_trans_ok/(?P<trans_id>[0-9]+)/$', views.dec_trans_ok, name='trans_dec_ok'),

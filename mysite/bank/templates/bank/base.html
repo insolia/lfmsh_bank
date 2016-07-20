@@ -47,16 +47,16 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{% url 'bank:index' %}">LFMSH B.S.</a>
+            <a class="navbar-brand" href="{% url 'bank:index' %}">Банк ЛФМШ</a>
         </div>
 
         <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-left">
 
                 {% if user.is_authenticated %}
-                <li><a href="{% url 'bank:index' %}">Home</a></li>
-                <li><a href="{% url 'bank:my_trans' %}">My Trans</a></li>
-                {% if user.account.can_add_trans %}
+                <li><a href="{% url 'bank:index' %}">Домой</a></li>
+                <li><a href="{% url 'bank:my_trans' %}">Мои транзакции</a></li>
+                <!----{% if user.account.can_add_trans %}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Add Trans <span class="caret"></span></a>
@@ -67,20 +67,20 @@
                         <li><a href="{% url 'bank:add_special' %}">Свободная</a></li>
                     </ul>
                 </li>
+                {% endif %} ---->
                 {% endif %}
-                {% endif %}
-                <li><a href="{% url 'bank:index' %}">About</a></li>
+
 
 
             </ul>
             <ul class="nav navbar-nav navbar-right">
 
                 {% if user.is_authenticated %}
-                <li><p class="navbar-text">Signed in as {{request.user.account.short_name}}</p></li>
-                <li><a href="{% url 'bank:logout' %}?next={% url 'bank:index' %}">Logout</a></li>
+                <li><p class="navbar-text">В системе как {{request.user.account.short_name}}</p></li>
+                <li><a href="{% url 'bank:logout' %}?next={% url 'bank:index' %}">Выйти</a></li>
                 {% else %}
                 <li><p class="navbar-text navbar-rigth">Вы не авторизированны в системе</p></li>
-                <li><a href="{% url 'bank:index' %}">Login</a></li>
+                <li><a href="{% url 'bank:index' %}">Войти</a></li>
                 {% endif %}
 
 

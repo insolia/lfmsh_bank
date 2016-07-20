@@ -6,23 +6,16 @@
 
 
 
-{% if next %}
-    {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-    {% else %}
-    <p>Please login to see this page.</p>
-    {% endif %}
-{% endif %}
+
 <div class="container">
 
 <form method="post" action="{% url 'bank:login' %}" class="form-signin">
 
-    <h2 class="form-signin-heading">Please sign in</h2>
+    <h2 class="form-signin-heading">Представьтесь пожалуйста</h2>
 
 {% csrf_token %}
     {% bootstrap_form form %}
-    {% buttons submit='OK' reset="Cancel" href="{{next}}"  %}{% endbuttons %}
+    {% buttons submit='OK' reset="Отмена" href="{{next}}"  %}{% endbuttons %}
 
     <input type="hidden" name="next" link="{{ next }}" />
 </form>

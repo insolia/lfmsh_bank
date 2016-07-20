@@ -1,5 +1,7 @@
 zaryadka_budget = 40
 max_p2p_sum = 100
+p2p_proc = 0.7
+
 
 from models import *
 from dal import autocomplete

@@ -1,9 +1,12 @@
+# coding=utf-8
 from django import forms
 from .models import Transaction, Account, TransactionType
 from django.contrib.auth.models import User, Group
 from django.forms import ModelChoiceField
 import helper_functions as hf
 from dal import autocomplete
+
+# -*- coding: utf-8 -*-
 
 
 class RecipientModelChoiceField(ModelChoiceField):
@@ -19,24 +22,36 @@ class SprecialTransForm(forms.Form):
     '''
 
     recipient = RecipientModelChoiceField(
-        queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'))
+        queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'), label=unicode('Получатель','utf-8'))
+
+    description = forms.CharField(max_length=400, widget=forms.Textarea, label=unicode('Описание','utf-8'))
+
+    value = forms.IntegerField(label=unicode('Сумма', 'utf-8'))
+
+    type = forms.ModelChoiceField(queryset=TransactionType.objects.all().exclude(name='p2p'), label=unicode('Тип','utf-8'))
 
 
 
-    description = forms.CharField(max_length=400, widget=forms.Textarea)
+class LabTransForm(forms.Form):
 
-    value = forms.IntegerField(label='sum')
 
-    type = forms.ModelChoiceField(queryset=TransactionType.objects.all())
+    recipient = RecipientModelChoiceField(
+        queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'), label=unicode('Получатель','utf-8'))
+
+    description = forms.CharField(max_length=400, widget=forms.Textarea, label=unicode('Описание','utf-8'))
+
+    value = forms.IntegerField(label=unicode('Сумма', 'utf-8'))
 
 
 class SeminarTransForm(forms.Form):
+
     recipient = RecipientModelChoiceField(queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr',
-                                                                                                                'user__last_name'))
+                                                                                                                'user__last_name'),
+                                          label=unicode('Пионер', 'utf-8'))
 
-    description = forms.CharField(label='topic and description', max_length=400, widget=forms.Textarea)
+    description = forms.CharField(label=unicode('Тема и описание', 'utf-8'), max_length=400, widget=forms.Textarea)
 
-    score = forms.IntegerField(label='score 0-40', max_value=40)
+    score = forms.IntegerField(label=unicode('Оценка [0, 40]', 'utf-8'), max_value=40)
 
 
 class P2PTransForm(forms.Form):
@@ -47,7 +62,7 @@ class P2PTransForm(forms.Form):
     '''
 
     recipient = RecipientModelChoiceField(
-        queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'))
-    description = forms.CharField(max_length=400, widget=forms.Textarea)
+        queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'), label=unicode('Получатель','utf-8'))
+    description = forms.CharField(max_length=400, widget=forms.Textarea, label=unicode('Сумма', 'utf-8'))
 
-    value = forms.IntegerField(label='sum', min_value=0, max_value=hf.max_p2p_sum)
+    value = forms.IntegerField(label=unicode('Сумма', 'utf-8'), min_value=0)
