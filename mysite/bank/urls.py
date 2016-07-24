@@ -7,7 +7,7 @@ urlpatterns = patterns('',
                        url(r'^$', views.index, name='index'),
 
                        url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', name='logout'),
-                       url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'bank/login.html'},
+                       url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'bank/login.html',},
                            name='login'),
 
 
@@ -16,6 +16,8 @@ urlpatterns = patterns('',
                        url(r'^all_acc_ped$', views.all_ped_accounts, name='all_acc_ped'),
 
                        url(r'^add_trans/special/$', views.add_special, name='add_special'),
+                       url(r'^add_trans/mass_special/$', views.add_mass_special, name='add_mass_special'),
+
                        url(r'^add_trans/zaryadka/', views.add_zaryadka, name='add_zaryadka'),
                        url(r'^add_trans/sem/', views.add_sem, name='add_sem'),
                        url(r'^add_trans/p2p/', views.add_p2p, name='add_p2p'),

@@ -40,7 +40,7 @@ class LabTransForm(forms.Form):
 
     description = forms.CharField(max_length=400, widget=forms.Textarea, label=unicode('Описание','utf-8'))
 
-    value = forms.IntegerField(label=unicode('Сумма', 'utf-8'))
+    value = forms.IntegerField(label=unicode('Сумма', 'utf-8'), min_value=0)
 
 
 class SeminarTransForm(forms.Form):
@@ -51,7 +51,7 @@ class SeminarTransForm(forms.Form):
 
     description = forms.CharField(label=unicode('Тема и описание', 'utf-8'), max_length=400, widget=forms.Textarea)
 
-    score = forms.IntegerField(label=unicode('Оценка [0, 40]', 'utf-8'), max_value=40)
+    score = forms.IntegerField(label=unicode('Оценка [0, 40]', 'utf-8'), max_value=40, min_value=0)
 
 
 class P2PTransForm(forms.Form):
@@ -63,6 +63,6 @@ class P2PTransForm(forms.Form):
 
     recipient = RecipientModelChoiceField(
         queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'), label=unicode('Получатель','utf-8'))
-    description = forms.CharField(max_length=400, widget=forms.Textarea, label=unicode('Сумма', 'utf-8'))
+    description = forms.CharField(max_length=400, widget=forms.Textarea, label=unicode('Описание', 'utf-8'))
 
     value = forms.IntegerField(label=unicode('Сумма', 'utf-8'), min_value=0)

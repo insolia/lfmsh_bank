@@ -13,8 +13,15 @@
 
     <h2 class="form-signin-heading">Представьтесь пожалуйста</h2>
 
+
 {% csrf_token %}
-    {% bootstrap_form form %}
+    <label >Логин:</label>
+
+    {% bootstrap_field form.username show_label=False %}
+      <label >Пароль:</label>
+
+    {% bootstrap_field form.password  show_label=False%}
+
     {% buttons submit='OK' reset="Отмена" href="{{next}}"  %}{% endbuttons %}
 
     <input type="hidden" name="next" link="{{ next }}" />

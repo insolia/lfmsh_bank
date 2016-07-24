@@ -50,12 +50,14 @@ class Account(models.Model):
         return 1
 
 
-
     def can_add_trans(self):
         if self.user.groups.filter(name__in=['pedsostav', 'admin']):
             return True
         return False
 
+
+    def get_balance(self):
+        return self.balance
 
 class TransactionType(models.Model):
     name = models.CharField(max_length=30)
@@ -81,8 +83,8 @@ class TransactionStatus(models.Model):
 class Transaction(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
 
-    recipient = models.ForeignKey(User, related_name='received_trans')
-    creator = models.ForeignKey(User, related_name='created_trans')
+    recipient = models.ForeignKey(User, related_name='received_trans', on_delete=models.CASCADE)
+    creator = models.ForeignKey(User, related_name='created_trans', on_delete=models.CASCADE)
 
     description = models.TextField(max_length=400, blank=True)
     value = models.IntegerField(default=0)
@@ -143,6 +145,7 @@ class Transaction(models.Model):
         self.save()
         return True
 
+
     def cancel(self):
 
         if not self.counted:
@@ -170,3 +173,4 @@ class Transaction(models.Model):
 
     def get_creation_date(self):
         return self.creation_date.strftime("%d.%m.%Y %H:%M")
+

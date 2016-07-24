@@ -30,4 +30,4 @@ def zaryadka(num_of_attendants):
     return 0
 
 def seminar(score):
-    return score / 2
+    return score // 2

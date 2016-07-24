@@ -103,6 +103,62 @@ def add_special(request):
         return render(request, 'bank/add_trans/trans_add_special.html', {'form': form})
 
 
+def add_mass_special(request):
+    if not request.user.is_authenticated():
+        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
+
+    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
+
+    if user_group_name == 'pioner':
+        return redirect(reverse('bank:index'))
+
+    if request.method == "POST":
+        print request.POST['type']
+
+        fac_attendants = []
+        form = SprecialTransForm(request.POST)
+
+        for u in User.objects.filter(groups__name='pioner'):
+            if u.username + '_num' in request.POST and request.POST[u.username + '_num']:
+                fac_attendants.append((u, request.POST[u.username + '_num']))
+
+        if not fac_attendants:
+            return redirect(reverse('bank:index'))
+
+        creator = request.user
+
+        description = request.POST['description']
+        type = TransactionType.objects.get(pk = request.POST['type'])
+
+        print type
+        status = TransactionStatus.objects.get(name='PR')
+        new_transactions = []
+        for u, s in fac_attendants:
+            new_trans = Transaction.create_trans(recipient=u, value=int(s), creator=creator, description=description,
+                                             type=type, status=status)
+            new_transactions.append(new_trans)
+        if new_transactions:
+            return render(request, 'bank/add_trans/trans_add_ok.html', {'transactions': new_transactions})
+        else:
+            users = User.objects.filter(groups__name='pioner')
+            return render(request, 'bank/add_trans/trans_add_mass_special.html', {'users': users})
+
+
+
+
+
+    else:
+        users = {}
+        users['1'] = User.objects.filter(groups__name='pioner').filter(account__otr=1).order_by('last_name')
+        users['2'] = User.objects.filter(groups__name='pioner').filter(account__otr=2).order_by('last_name')
+        users['3'] = User.objects.filter(groups__name='pioner').filter(account__otr=3).order_by('last_name')
+        users['4'] = User.objects.filter(groups__name='pioner').filter(account__otr=4).order_by('last_name')
+
+        form = SprecialTransForm()
+
+        return render(request, 'bank/add_trans/trans_add_mass_special.html', {'users': users, 'form': form})
+
+
 def add_zaryadka(request):
     if not request.user.is_authenticated():
         return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
@@ -238,41 +294,6 @@ def add_sem(request):
         form = SeminarTransForm()
         return render(request, 'bank/add_trans/trans_add_seminar.html', {'form': form})
 
-    def add_special(request):
-
-        if not request.user.is_authenticated():
-            return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
-
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-
-    if user_group_name == 'pioner':
-        return redirect(reverse('bank:index'))
-
-    if request.method == "POST":
-
-        form = SprecialTransForm(request.POST)
-        if form.is_valid():
-            value = form.cleaned_data['value']
-            recipient = form.cleaned_data['recipient'].user
-            description = form.cleaned_data['description']
-            creator = request.user
-
-            type = TransactionType.objects.get(name='Other')
-            status = TransactionStatus.objects.get(name='PR')
-
-            new_trans = Transaction.create_trans(recipient=recipient, value=value, creator=creator,
-                                                 description=description,
-                                                 type=type, status=status)
-
-            return render(request, 'bank/add_trans/trans_add_ok.html', {'transactions': [new_trans]})
-        return render(request, 'bank/add_trans/trans_add_special.html', {'form': form})
-
-
-    else:
-
-        form = SprecialTransForm()
-        return render(request, 'bank/add_trans/trans_add_special.html', {'form': form})
-
 
 def add_lab(request):
     if not request.user.is_authenticated():
@@ -321,6 +342,11 @@ def add_p2p(request):
     if request.method == "POST":
 
         form = P2PTransForm(request.POST)
+        form.fields['value'].max_value = int((request.user.account.balance * hf.p2p_proc))
+        print form.fields['value'].max_value
+        print form.fields['value']
+
+
         if form.is_valid():
             value = form.cleaned_data['value']
             recipient = form.cleaned_data['recipient'].user
@@ -374,7 +400,7 @@ def dec_trans_ok(request, trans_id):
     if request.method == "POST":
 
         # decline of trans happening
-        trans.cancel()
+        trans.cancel
 
         if user_group_name == 'admin':
 
@@ -426,17 +452,21 @@ def manage_p2p(request):
         con_trans = []
         dec_trans = []
 
-        for t in Transaction.objects.filter(status__name='AD'):
-            if str(t.pk) + '_confirm' in request.POST:
-                t.status = TransactionStatus.objects.get(name='PR')
-                t.count()
+        for pk in xrange(1000):
+            if 'c_' + str(pk) in request.POST:
+                t = Transaction.objects.get(pk=pk)
+                if request.POST['c_'+str(pk)] == 'confirm':
+                    print 'confirm' + str(t.pk)
+                    t.status = TransactionStatus.objects.get(name='PR')
+                    t.count()
 
-                con_trans.append(t)
+                    con_trans.append(t)
 
-            if str(t.pk) + '_cancel' in request.POST:
-                t.status = TransactionStatus.objects.get(name='DA')
-                t.save()
-                dec_trans.append(t)
+                if request.POST['c_'+str(pk)] == 'cancel':
+                    print 'cancel' + str(t.pk)
+                    t.status = TransactionStatus.objects.get(name='DA')
+                    t.save()
+                    dec_trans.append(t)
 
     trans = Transaction.objects.filter(status__name='AD').order_by('creation_date')
 
