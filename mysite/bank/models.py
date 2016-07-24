@@ -49,6 +49,10 @@ class Account(models.Model):
             return 0
         return 1
 
+    def sem_read(self):
+        a = Transaction.objects.filter(recipient=self.user, type=TransactionType.objects.get(name='Seminar'), value__gte=0)
+        return len(a)
+
 
     def can_add_trans(self):
         if self.user.groups.filter(name__in=['pedsostav', 'admin']):
@@ -58,6 +62,7 @@ class Account(models.Model):
 
     def get_balance(self):
         return self.balance
+
 
 class TransactionType(models.Model):
     name = models.CharField(max_length=30)

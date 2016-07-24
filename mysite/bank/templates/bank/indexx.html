@@ -24,18 +24,22 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-6 ">
+    <div class="col-sm-4 ">
         <div class="text-left">
             <h5> Вы сделали {{request.user.account.lab_passed}} лаб из {{request.user.account.lab_needed}} необходимых</h5>
         </div>
     </div>
 
-     <div class="col-sm-6 ">
+     <div class="col-sm-4 ">
         <div class="text-left">
             <h5> Вы получили {{request.user.account.fac_passed}} зачетов по факультативу. Надо минимум {{request.user.account.fac_needed}}</h5>
         </div>
     </div>
-
+    <div class="col-sm-4 ">
+        <div class="text-left">
+            <h5> Вы прочитали {{request.user.account.sem_read}} семинаров. Надо минимум 1</h5>
+        </div>
+    </div>
 
 </div>
 
