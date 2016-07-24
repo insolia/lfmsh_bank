@@ -1,0 +1,312 @@
+Белоусова Алина
+login: asbelousova password: 111
+
+Булгатова Юлия
+login: judbulgatova password: 111
+
+Громова Ольга
+login: oagromova password: 111
+
+Домбек Евгений
+login: emdombek password: 111
+
+Иваник Даниил
+login: diivanik password: 111
+
+Клевцов Никита
+login: nmklevtsov password: 111
+
+Кочаровский Денис
+login: dvkocharovskij password: 111
+
+Трофимов Арсений
+login: adtrofimov password: 111
+
+Черемхина Татьяна
+login: tacheremhina password: 111
+
+Абрамов Семен
+login: ssabramov password: 111
+
+Баранов Егор
+login: eabaranov password: 111
+
+Бурдонов Глеб
+login: gfburdonov password: 111
+
+Варфоломеев Дмитрий
+login: davarfolomeev password: 111
+
+Гасымов Дамир
+login: dfgasymov password: 111
+
+Глявина Анна
+login: amgljavina password: 111
+
+Гордеева Валерия
+login: vmgordeeva password: 111
+
+Зарков Максим
+login: mrzarkov password: 111
+
+Зубкова Александра
+login: aizubkova password: 111
+
+Карев Андрей
+login: amkarev password: 111
+
+Кирсанова Дарья
+login: dakirsanova password: 111
+
+Крылова Мария
+login: mikrylova password: 111
+
+Крылова Наталья
+login: nikrylova password: 111
+
+Лабутина Ксения
+login: kslabutina password: 111
+
+Лобашев Егор
+login: ealobashev password: 111
+
+Макарчук Алексей
+login: aimakarchuk password: 111
+
+Меркулов Константин
+login: ksmerkulov password: 111
+
+Мыльникова Ольга
+login: ommyl'nikova password: 111
+
+Нисневич Евгения
+login: eanisnevich password: 111
+
+Павлов Вячеслав
+login: vspavlov password: 111
+
+Павлова Полина
+login: pkpavlova password: 111
+
+Розно Константин
+login: kvrozno password: 111
+
+Тамаркина Нина
+login: natamarkina password: 111
+
+Тарасова Татьяна
+login: tvtarasova password: 111
+
+Фадеев Александр
+login: agfadeev password: 111
+
+Черепанова Наталия
+login: nvcherepanova password: 111
+
+Чечет Дмитрий
+login: dochechet password: 111
+
+Яхтин Леонид
+login: lajahtin password: 111
+
+Авсянникова Анастасия
+login: apavsjannikova password: 111
+
+Алексеева Ксения
+login: kaalekseeva password: 111
+
+Балахнин Сергей
+login: sabalahnin password: 111
+
+Великанова Марина
+login: mavelikanova password: 111
+
+Войтович Дарья
+login: davojtovich password: 111
+
+Гиндинсон Артем
+login: amgindinson password: 111
+
+Горбачева Юлия
+login: juagorbacheva password: 111
+
+Дмитриев Никита
+login: nidmitriev password: 111
+
+Долматкин Александр
+login: aadolmatkin password: 111
+
+Езерская Анастасия
+login: akezerskaja password: 111
+
+Ерухимова Наталья
+login: nveruhimova password: 111
+
+Калякулина Анастасия
+login: aikaljakulina password: 111
+
+Камсков Сергей
+login: smkamskov password: 111
+
+Канафеева Анжелика
+login: aikanafeeva password: 111
+
+Карабельникова Юлиана
+login: judkarabel'nikova password: 111
+
+Клубков Александр
+login: avklubkov password: 111
+
+Коган Анна
+login: aakogan password: 111
+
+Колесин Андрей
+login: askolesin password: 111
+
+Коняхин Сергей
+login: svkonjahin password: 111
+
+Кочанова Алена
+login: aekochanova password: 111
+
+Кузнецов Артём
+login: amkuznetsov password: 111
+
+Лебедева Екатерина
+login: emlebedeva password: 111
+
+Мазур Даниил
+login: damazur password: 111
+
+Малиновская Мария
+login: msmalinovskaja password: 111
+
+Мальчикова Юлия
+login: jusmal'chikova password: 111
+
+Манкус Данюс
+login: drmankus password: 111
+
+Павлов Никита
+login: nkpavlov password: 111
+
+Подкидышев Алексей
+login: aspodkidyshev password: 111
+
+Поляков Андрей
+login: aspoljakov password: 111
+
+Разумова Мария
+login: mdrazumova password: 111
+
+Рябчикова Валерия
+login: vgrjabchikova password: 111
+
+Семушина Татьяна
+login: tasemushina password: 111
+
+Труфанов Сергей
+login: satrufanov password: 111
+
+Уварова Алиса
+login: aiuvarova password: 111
+
+Харь Наталия
+login: nihar' password: 111
+
+Царева Анна
+login: adtsareva password: 111
+
+Янышев Егор
+login: edjanyshev password: 111
+
+Адамова Ирина
+login: inadamova password: 111
+
+Аникин Кирилл
+login: koanikin password: 111
+
+Арсенюк Оксана
+login: oaarsenjuk password: 111
+
+Большакова Анастасия
+login: ambol'shakova password: 111
+
+Варламов Семен
+login: savarlamov password: 111
+
+Владимирова Анна
+login: apvladimirova password: 111
+
+Власов Дмитрий
+login: dsvlasov password: 111
+
+Востокова Екатерина
+login: evvostokova password: 111
+
+Галкин Георгий
+login: gdgalkin password: 111
+
+Геликонова Валерия
+login: vggelikonova password: 111
+
+Горьков Алексей
+login: adgor'kov password: 111
+
+Гусев Максим
+login: mogusev password: 111
+
+Донцова Ольга
+login: oadontsova password: 111
+
+Ерофеев Александр
+login: aserofeev password: 111
+
+Земскова Татьяна
+login: tszemskova password: 111
+
+Капустин Дмитрий
+login: dokapustin password: 111
+
+Карпов Иван
+login: iakarpov password: 111
+
+Картомин Никита
+login: nakartomin password: 111
+
+Киселев Александр
+login: aakiselev password: 111
+
+Колобянина Анна
+login: aekolobjanina password: 111
+
+Кумин Алексей
+login: aakumin password: 111
+
+Ларичев Никита
+login: nvlarichev password: 111
+
+Малахова Анастасия
+login: asmalahova password: 111
+
+Павлихина Виктория
+login: vapavlihina password: 111
+
+Рыжов Иван
+login: idryzhov password: 111
+
+Рысин Михаил
+login: marysin password: 111
+
+Скуридин Юрий
+login: juaskuridin password: 111
+
+Тищенко Кирилл
+login: kmtischenko password: 111
+
+Филатова Ксения
+login: kifilatova password: 111
+
+Верниковская Мария
+login: mavernikovskaja password: 111
+
