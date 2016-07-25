@@ -1,2 +1,4 @@
 django-autocomplete-light
 django-bootstrap3
+django-tables2
+

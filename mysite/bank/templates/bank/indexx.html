@@ -54,7 +54,13 @@
 
 {% if user_group == 'pioner' %}
 <br>
+
+{% if user.account.balance > 40 %}
 <a href="{% url 'bank:add_p2p' %}"> Подать заявку на личный перевод</a>
+{% else %}
+<p>Вы не можете отправлять личные переводы пока у вас на счету меньше {{p2p_buf}}@</p>
+
+{%endif%}
 {%endif%}
 
 
@@ -68,6 +74,9 @@
 <br>
 <a href="{% url 'bank:manage_p2p' %}"> Разобрать пионерские личные транзакции</a> ({{ unm_len }})
 <br>
+<a href="{% url 'bank:super_table' %}"> Посмотреть супер таблицу</a>
+<br>
+
 {%endif%}
 
 {% if user.account.can_add_trans %}

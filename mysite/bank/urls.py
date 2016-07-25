@@ -31,5 +31,7 @@ urlpatterns = patterns('',
                        url(r'manage_p2p', views.manage_p2p, name='manage_p2p'),
 
                        url(r'^pioner-autocomplete/$', PionerAutocomplete.as_view(), name='pioner-autocomplete'),
+                       url(r'^super_table/$', views.super_table, name='super_table'),
+
                        )
 

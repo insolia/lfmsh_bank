@@ -1,5 +1,5 @@
 zaryadka_budget = 40
-max_p2p_sum = 100
+p2p_buf = 40
 p2p_proc = 0.7
 
 

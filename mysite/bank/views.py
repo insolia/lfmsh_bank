@@ -10,8 +10,9 @@ from django.contrib.auth.views import logout_then_login
 from django.views import generic
 from django.core.urlresolvers import reverse
 from .forms import *
+from django_tables2 import RequestConfig
+from .tables import *
 from django.utils import timezone
-
 import helper_functions as hf
 
 
@@ -28,7 +29,7 @@ def index(request):
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
     p2p_unmanaged_len = len(Transaction.objects.filter(status__name='AD'))
     print user_group_name
-    return render(request, 'bank/indexx.html', {'user_group': user_group_name, 'unm_len': p2p_unmanaged_len})
+    return render(request, 'bank/indexx.html', {'user_group': user_group_name, 'unm_len': p2p_unmanaged_len, 'p2p_buf':hf.p2p_buf})
 
 
 def all_pioner_accounts(request):
@@ -341,7 +342,7 @@ def add_p2p(request):
 
     if request.method == "POST":
 
-        form = P2PTransForm(request.POST)
+        form = P2PTransForm(request.POST, max_value=int(request.user.account.balance - hf.p2p_buf))
         form.fields['value'].max_value = int((request.user.account.balance * hf.p2p_proc))
         print form.fields['value'].max_value
         print form.fields['value']
@@ -365,9 +366,8 @@ def add_p2p(request):
 
     else:
 
-        form = P2PTransForm()
+        form = P2PTransForm(int((request.user.account.balance - hf.p2p_buf)))
         form.fields['recipient'].queryset = form.fields['recipient'].queryset.exclude(user=request.user)
-        form.fields['value'].max_value = int((request.user.account.balance * hf.p2p_proc))
 
         print form.fields['value'].max_value
 
@@ -471,5 +471,12 @@ def manage_p2p(request):
     trans = Transaction.objects.filter(status__name='AD').order_by('creation_date')
 
     return render(request, 'bank/transaction_lists/admin_p2p_list.html', {'trans': trans})
+
+
+def super_table(request):
+    table = TransTable(Transaction.objects.all())
+    RequestConfig(request).configure(table)
+    return render(request, 'bank/s_table.html', {'trans': table})
+
 
 

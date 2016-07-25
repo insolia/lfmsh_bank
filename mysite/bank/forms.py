@@ -61,6 +61,12 @@ class P2PTransForm(forms.Form):
         fields = ('recipient', 'value', 'description')
     '''
 
+
+    def __init__(self, max_value, *args, **kwargs):
+        super(P2PTransForm, self).__init__(*args, **kwargs)
+        self.fields['value'] = forms.IntegerField(max_value=max_value, label=unicode('Сумма', 'utf-8'), min_value=0)
+
+
     recipient = RecipientModelChoiceField(
         queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'), label=unicode('Получатель','utf-8'))
     description = forms.CharField(max_length=400, widget=forms.Textarea, label=unicode('Описание', 'utf-8'))
