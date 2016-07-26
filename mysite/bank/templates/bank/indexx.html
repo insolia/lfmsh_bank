@@ -52,7 +52,7 @@
 <a href="{% url 'bank:my_trans' %}"> Посмотреть свои транзакции</a>
 <br>
 
-{% if user_group == 'pioner' %}
+{% if 'bank.add_p2p_transaction' in request.user.get_all_permissions %}
 <br>
 
 {% if user.account.balance > 40 %}
@@ -65,18 +65,25 @@
 
 
 
-
-{% if user_group == 'admin' %}
+{% if 'bank.view_pio_trans_list' in request.user.get_all_permissions %}
 <br>
 <a href="{% url 'bank:all_acc' %}"> Посмотреть список пионеров с балансом</a>
 <br>
+{%endif%}
+
+{% if 'bank.view_ped_trans_list' in request.user.get_all_permissions %}
 <a href="{% url 'bank:all_acc_ped' %}"> Посмотреть список педсостава</a>
 <br>
+{%endif%}
+
+{% if 'bank.manage_trans' in request.user.get_all_permissions %}
 <a href="{% url 'bank:manage_p2p' %}"> Разобрать пионерские личные транзакции</a> ({{ unm_len }})
 <br>
+{%endif%}
+
+{% if 'bank.see_super_table' in request.user.get_all_permissions %}
 <a href="{% url 'bank:super_table' %}"> Посмотреть супер таблицу</a>
 <br>
-
 {%endif%}
 
 {% if user.account.can_add_trans %}

@@ -55,9 +55,9 @@ class Account(models.Model):
 
 
     def can_add_trans(self):
-        if self.user.groups.filter(name__in=['pedsostav', 'admin']):
-            return True
-        return False
+        '''if self.user.groups.filter(name__in=['pedsostav', 'admin']):
+            return True'''
+        return self.user.has_perm('bank.add_transaction')
 
 
     def get_balance(self):

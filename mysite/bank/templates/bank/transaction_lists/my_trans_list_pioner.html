@@ -82,10 +82,6 @@
 
 
         {% if t.status.name != 'DA' and t.status.name != 'DC' %}
-
-
-
-
         {% if t.status.name = 'PR' %}
     <tr class="success">
         {% endif%}
@@ -100,12 +96,15 @@
         <td>{{t.recipient.account}}</td>
 
         <td>{{t.description}}</td>
+
         <td>
+
             {% if t.can_be_declined %}
             <a class="btn btn-info" href="{% url 'bank:trans_dec' t.pk %}" role="button">Отменить</a>
             {% else %}
             <p> Нельзя отменить</p>
         </td>
+
     </tr>
     {% endif %}
     {% endif%}

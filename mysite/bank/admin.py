@@ -2,7 +2,9 @@ from django.contrib import admin
 
 # Register your models here.
 from bank.models import Account, Transaction, TransactionType, TransactionStatus
+from django.contrib.auth.models import Permission
 
+admin.site.register(Permission)
 admin.site.register(Account)
 
 admin.site.register(Transaction)

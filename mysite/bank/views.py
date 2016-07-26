@@ -4,6 +4,7 @@ from bank.models import Account, Transaction, TransactionType, TransactionStatus
 from django.template import Context, loader
 from django.conf import settings
 from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import logout, login
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.views import logout_then_login
@@ -19,11 +20,8 @@ import helper_functions as hf
 
 
 # Create your views here.
-
+@login_required
 def index(request):
-    if not request.user.is_authenticated():
-        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
-
     print request.user.account.can_add_trans()
 
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
@@ -31,10 +29,9 @@ def index(request):
     print user_group_name
     return render(request, 'bank/indexx.html', {'user_group': user_group_name, 'unm_len': p2p_unmanaged_len, 'p2p_buf':hf.p2p_buf})
 
-
+@login_required
+@permission_required('bank.view_pio_trans_list')
 def all_pioner_accounts(request):
-    if not request.user.is_authenticated():
-        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
 
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
 
@@ -48,10 +45,9 @@ def all_pioner_accounts(request):
 
     return render(request, template_name, {'accounts': accounts, 'table': 'bank/add_trans/otr_tables/activity_table.html', 'list' : [1,2,3,4]})
 
-
+@login_required
+@permission_required('bank.view_ped_trans_list')
 def all_ped_accounts(request):
-    if not request.user.is_authenticated():
-        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
 
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
     if user_group_name == 'pioner':
@@ -61,14 +57,11 @@ def all_ped_accounts(request):
     accounts = Account.objects.filter(user__groups__name='pedsostav').order_by('-balance')
     return render(request, template_name, {'accounts': accounts})
 
-
+@login_required
 def show_my_trans(request):
-    if not request.user.is_authenticated():
-        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
+
 
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-    if user_group_name == 'pioner':
-        return redirect(reverse('bank:index'))
 
     out_trans = Transaction.objects.filter(creator=request.user).order_by('-creation_date')
 
@@ -83,14 +76,8 @@ def show_my_trans(request):
                       {'out_trans': out_trans})
 
 
+@permission_required('bank.add_transaction',login_url='bank:index')
 def add_special(request):
-    if not request.user.is_authenticated():
-        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
-
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-
-    if user_group_name == 'pioner':
-        return redirect(reverse('bank:index'))
 
     if request.method == "POST":
 
@@ -117,15 +104,8 @@ def add_special(request):
         form = SprecialTransForm()
         return render(request, 'bank/add_trans/trans_add_special.html', {'form': form})
 
-
+@permission_required('bank.add_transaction',login_url='bank:index')
 def add_mass_special(request):
-    if not request.user.is_authenticated():
-        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
-
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-
-    if user_group_name == 'pioner':
-        return redirect(reverse('bank:index'))
 
     if request.method == "POST":
         print request.POST['type']
@@ -173,15 +153,9 @@ def add_mass_special(request):
 
         return render(request, 'bank/add_trans/trans_add_mass_special.html', {'users': users, 'form': form})
 
-
+@permission_required('bank.add_transaction',login_url='bank:index')
 def add_zaryadka(request):
-    if not request.user.is_authenticated():
-        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
 
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-
-    if user_group_name == 'pioner':
-        return redirect(reverse('bank:index'))
 
     if request.method == "POST":
         if len(request.POST) < 3:
@@ -223,14 +197,9 @@ def add_zaryadka(request):
         return render(request, 'bank/add_trans/trans_add_zaryadka.html', {'users': users, 'table': 'bank/add_trans/otr_tables/zaryadka_table.html', 'list' : [1,2,3,4]})
 
 
+@permission_required('bank.add_transaction',login_url='bank:index')
 def add_fac(request):
-    if not request.user.is_authenticated():
-        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
 
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-
-    if user_group_name == 'pioner':
-        return redirect(reverse('bank:index'))
 
     if request.method == "POST":
         print request.POST
@@ -273,14 +242,9 @@ def add_fac(request):
 
 
 
+@permission_required('bank.add_transaction',login_url='bank:index')
 def add_activity(request):
-    if not request.user.is_authenticated():
-        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
 
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-
-    if user_group_name == 'pioner':
-        return redirect(reverse('bank:index'))
 
     if request.method == "POST":
 
@@ -327,14 +291,8 @@ def add_activity(request):
         return render(request, 'bank/add_trans/trans_add_activity.html', {'users': users, 'table': 'bank/add_trans/otr_tables/activity_table.html', 'list' : [1,2,3,4]})
 
 
+@permission_required('bank.add_transaction',login_url='bank:index')
 def add_sem(request):
-    if not request.user.is_authenticated():
-        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
-
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-
-    if user_group_name == 'pioner':
-        return redirect(reverse('bank:index'))
 
     if request.method == "POST":
 
@@ -365,14 +323,9 @@ def add_sem(request):
         return render(request, 'bank/add_trans/trans_add_seminar.html', {'form': form})
 
 
+@permission_required('bank.add_transaction',login_url='bank:index')
 def add_lab(request):
-    if not request.user.is_authenticated():
-        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
 
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-
-    if user_group_name == 'pioner':
-        return redirect(reverse('bank:index'))
 
     if request.method == "POST":
 
@@ -399,22 +352,14 @@ def add_lab(request):
         form = LabTransForm()
         return render(request, 'bank/add_trans/trans_add_lab.html', {'form': form})
 
-
+@permission_required('bank.add_p2p_transaction',login_url='bank:index')
 def add_p2p(request):
-    if not request.user.is_authenticated():
-        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
-
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-
-    if user_group_name != 'pioner':
-        return redirect(reverse('bank:index'))
 
     if request.method == "POST":
 
-        form = P2PTransForm(request.POST, max_value=int(request.user.account.balance - hf.p2p_buf))
-        form.fields['value'].max_value = int((request.user.account.balance * hf.p2p_proc))
-        print form.fields['value'].max_value
-        print form.fields['value']
+        form = P2PTransForm(int(request.user.account.balance - hf.p2p_buf), request.POST)
+        #form.fields['value'].max_value = int((request.user.account.balance * hf.p2p_proc))
+        #print form.fields['value']
 
 
         if form.is_valid():
@@ -442,7 +387,7 @@ def add_p2p(request):
 
         return render(request, 'bank/add_trans/trans_add_p2p.html', {'form': form})
 
-
+@permission_required('bank.add_transaction',login_url='bank:index')
 def dec_trans(request, trans_id):
     print 'decline page'
     if not request.user.is_authenticated():
@@ -456,7 +401,7 @@ def dec_trans(request, trans_id):
 
     return render(request, 'bank/dec_trans/trans_dec_confirm.html', {'t': trans})
 
-
+@permission_required('bank.add_transaction',login_url='bank:index')
 def dec_trans_ok(request, trans_id):
     if not request.user.is_authenticated():
         return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
@@ -487,13 +432,12 @@ def dec_trans_ok(request, trans_id):
 
     return render(request, 'bank/dec_trans/trans_dec_ok.html', {'transactions': [trans]})
 
-
+@permission_required('bank.view_pio_trans_list',login_url='bank:index')
 def trans_list(request, username):
-    if not request.user.is_authenticated():
-        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
 
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-    if user_group_name != 'admin':
+    user_group_name = User.objects.get(username=username).groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
+
+    if user_group_name != 'pioner' and not request.user.has_perm('bank.view_ped_trans_list'):
         return redirect(reverse('bank:index'))
 
     t_user = User.objects.get(username=username)
@@ -504,7 +448,7 @@ def trans_list(request, username):
     return render(request, 'bank/transaction_lists/admin_trans_list.html',
                   {'in_trans': in_trans, 'out_trans': out_trans, 'user_group': user_group_name, 'user': t_user})
 
-
+@permission_required('bank.manage_trans',login_url='bank:index')
 def manage_p2p(request):
     if not request.user.is_authenticated():
         return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
@@ -541,7 +485,7 @@ def manage_p2p(request):
 
     return render(request, 'bank/transaction_lists/admin_p2p_list.html', {'trans': trans})
 
-
+@permission_required('bank.see_super_table',login_url='bank:index')
 def super_table(request):
     if not request.user.is_authenticated():
         return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
