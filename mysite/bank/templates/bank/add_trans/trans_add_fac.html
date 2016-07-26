@@ -88,7 +88,7 @@
         {% for u in users.4 %}
         <tr>
             <td>{{u.account.long_name}}</td>
-            <td><input type="number" name="{{u.username}}_num"  ></td>
+            <td><input type="number" name="{{u.username}}_num" min="0"  ></td>
         </tr>
         {% endfor %}
 </table>

@@ -26,7 +26,7 @@
         <td>{% if t.value > 0 %}
             +
             {% endif %}
-            {{t.value}}@
+            {{t.get_value}}@
         </td>
         <td>{{t.recipient.account}}</td>
         <td>{{t.status}}</td>

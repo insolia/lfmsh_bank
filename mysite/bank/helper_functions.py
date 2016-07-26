@@ -1,7 +1,8 @@
-zaryadka_budget = 40
-p2p_buf = 40
+zaryadka_budget = 40.
+p2p_buf = 40.
 p2p_proc = 0.7
 
+activity_money = {1 : 20, 2: 15, 3: 10, 4: 5}
 
 from models import *
 from dal import autocomplete

@@ -14,7 +14,7 @@
     <tr>
         <td><a class="link" href="{% url 'bank:trans_list' u.user.username %}">{{u}}</a></td>
 
-        <td>{{u.balance}}</td>
+        <td>{{u.get_balance}}</td>
 
         </td>
     </tr>

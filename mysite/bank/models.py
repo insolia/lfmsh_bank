@@ -11,7 +11,7 @@ class Account(models.Model):
     '''
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    balance = models.IntegerField(default=0)
+    balance = models.FloatField(default=0)
     third_name = models.CharField(max_length=40, default='Not stated')
 
     otr = models.IntegerField(default=1)
@@ -61,7 +61,10 @@ class Account(models.Model):
 
 
     def get_balance(self):
-        return self.balance
+        if self.balance > 10:
+
+            return int(self.balance)
+        return round(self.balance, 1)
 
 
 class TransactionType(models.Model):
@@ -92,7 +95,7 @@ class Transaction(models.Model):
     creator = models.ForeignKey(User, related_name='created_trans', on_delete=models.CASCADE)
 
     description = models.TextField(max_length=400, blank=True)
-    value = models.IntegerField(default=0)
+    value = models.FloatField(default=0)
 
     counted = models.BooleanField(default=False, editable=False)
 
@@ -179,3 +182,8 @@ class Transaction(models.Model):
     def get_creation_date(self):
         return self.creation_date.strftime("%d.%m.%Y %H:%M")
 
+    def get_value(self):
+        if self.value > 10:
+
+            return int(self.value)
+        return round(self.value, 1)

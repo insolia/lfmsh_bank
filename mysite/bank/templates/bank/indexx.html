@@ -18,7 +18,7 @@
 <div class="row">
     <div class="col-sm-12 col-sm-offset-0">
         <div class="text-left">
-            <h3> Ваш баланс  {{request.user.account.balance}} @</h3>
+            <h3> Ваш баланс  {{request.user.account.get_balance}} @</h3>
         </div>
     </div>
 </div>
@@ -95,6 +95,9 @@
 
 
 <a href="{% url 'bank:add_fac' %}"> Зачет за факультатив </a>
+<br>
+
+<a href="{% url 'bank:add_activity' %}"> Призы за мероприятия </a>
 <br>
 
 <a href="{% url 'bank:add_mass_special' %}"> Массовая специальная </a>

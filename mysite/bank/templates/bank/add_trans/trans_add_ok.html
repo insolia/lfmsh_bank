@@ -17,15 +17,18 @@
             <td>{{a.recipient.first_name}} {{a.recipient.last_name}}</td>
             <td>{% if a.value > 0 %}+
                 {% endif %}
-                {{ a.value }}@
+                {{ a.get_value }}@
             </td>
-            <td>{{a.recipient.account.balance}}@</td>
+            <td>{{a.recipient.account.get_balance}}@</td>
         </tr>
 
     {% endfor %}
 
 
 </table>
+<br>
+
+Транзакции учитываются с точностью до 7 знака после запятой, но для вашего удобства мы показываем округленные значения
 
 
 

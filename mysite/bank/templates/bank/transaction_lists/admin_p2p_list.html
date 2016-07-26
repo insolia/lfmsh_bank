@@ -31,11 +31,11 @@
         <td>{{t.get_creation_date}}</td>
 
 
-        <td>{{t.creator.account}} ({{t.creator.account.balance}} @)</td>
+        <td>{{t.creator.account}} ({{t.creator.account.get_balance}} @)</td>
 
-        <td>{{t.recipient.account}} ({{t.recipient.account.balance}} @)</td>
+        <td>{{t.recipient.account}} ({{t.recipient.account.get_balance}} @)</td>
 
-         <td>+{{t.value}}@</td>
+         <td>+{{t.get_value}}@</td>
 
         <td>{{t.description}}</td>
         <td>

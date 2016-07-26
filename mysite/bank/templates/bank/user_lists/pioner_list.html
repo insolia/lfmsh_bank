@@ -22,7 +22,7 @@
     <tr>
         <td><a class="link" href="{% url 'bank:trans_list' u.user.username %}">{{u}}</a>
         </td>
-        <td>{{u.balance}}@</td>
+        <td>{{u.get_balance}}@</td>
     </tr>
     {% endfor %}
 </table>
@@ -44,7 +44,7 @@
     <tr>
         <td><a class="link" href="{% url 'bank:trans_list' u.user.username %}">{{u}}</a>
         </td>
-        <td>{{u.balance}}@</td>
+        <td>{{u.get_balance}}@</td>
     </tr>
             {% endfor %}
 
@@ -70,7 +70,7 @@
     <tr>
         <td><a class="link" href="{% url 'bank:trans_list' u.user.username %}">{{u}}</a>
         </td>
-        <td>{{u.balance}}@</td>
+        <td>{{u.get_balance}}@</td>
     </tr>
             {% endfor %}
 
@@ -92,7 +92,7 @@
     <tr>
         <td><a class="link" href="{% url 'bank:trans_list' u.user.username %}">{{u}}</a>
         </td>
-        <td>{{u.balance}}@</td>
+        <td>{{u.get_balance}}@</td>
     </tr>
             {% endfor %}
 
