@@ -548,7 +548,7 @@ def super_table(request):
 
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
 
-    if user_group_name != 'pioner':
+    if user_group_name != 'admin':
         return redirect(reverse('bank:index'))
 
     table = TransTable(Transaction.objects.all())
