@@ -61,7 +61,7 @@ class Account(models.Model):
 
 
     def get_balance(self):
-        if abs(self.balance) > 10:
+        if abs(self.balance) > 9.99:
 
             return int(self.balance)
         return round(self.balance, 1)
@@ -183,7 +183,7 @@ class Transaction(models.Model):
         return self.creation_date.strftime("%d.%m.%Y %H:%M")
 
     def get_value(self):
-        if abs(self.value) > 10:
+        if abs(self.value) > 9.99:
 
             return int(self.value)
         return round(self.value, 1)

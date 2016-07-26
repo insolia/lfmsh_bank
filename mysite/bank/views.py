@@ -387,21 +387,19 @@ def add_p2p(request):
 
         return render(request, 'bank/add_trans/trans_add_p2p.html', {'form': form})
 
-@permission_required('bank.add_transaction',login_url='bank:index')
+@login_required()
 def dec_trans(request, trans_id):
     print 'decline page'
-    if not request.user.is_authenticated():
-        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
 
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
+
 
     trans = Transaction.objects.get(pk=trans_id)
-    if trans.creator != request.user and user_group_name != 'admin':
+    if trans.creator != request.user and not request.user.has_perm('del_foreign_trans'):
         return redirect(reverse('bank:index'))
 
     return render(request, 'bank/dec_trans/trans_dec_confirm.html', {'t': trans})
 
-@permission_required('bank.add_transaction',login_url='bank:index')
+@login_required
 def dec_trans_ok(request, trans_id):
     if not request.user.is_authenticated():
         return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
