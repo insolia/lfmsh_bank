@@ -22,36 +22,36 @@ class SprecialTransForm(forms.Form):
     '''
 
     recipient = RecipientModelChoiceField(
-        queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'), label=unicode('Получатель','utf-8'))
+        queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'),
+        label=unicode('Получатель', 'utf-8'))
 
-    description = forms.CharField(max_length=400, widget=forms.Textarea, label=unicode('Описание','utf-8'))
+    type = forms.ModelChoiceField(queryset=TransactionType.objects.all().exclude(name='p2p').exclude(group1='fine'),
+                                  label=unicode('Тип', 'utf-8'))
 
-    value = forms.IntegerField(label=unicode('Сумма', 'utf-8'))
+    value = forms.IntegerField(label=unicode('Сумма', 'utf-8'),  min_value=0)
 
-    type = forms.ModelChoiceField(queryset=TransactionType.objects.all().exclude(name='p2p'), label=unicode('Тип','utf-8'))
+    description = forms.CharField(max_length=1000, widget=forms.Textarea, label=unicode('Описание', 'utf-8'))
 
 
 
 class LabTransForm(forms.Form):
-
-
     recipient = RecipientModelChoiceField(
-        queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'), label=unicode('Получатель','utf-8'))
+        queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'),
+        label=unicode('Получатель', 'utf-8'))
 
-    description = forms.CharField(max_length=400, widget=forms.Textarea, label=unicode('Описание','utf-8'))
+    description = forms.CharField(max_length=400, widget=forms.Textarea, label=unicode('Описание', 'utf-8'))
 
     value = forms.IntegerField(label=unicode('Сумма', 'utf-8'), min_value=0)
 
 
 class SeminarTransForm(forms.Form):
-
     recipient = RecipientModelChoiceField(queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr',
                                                                                                                 'user__last_name'),
                                           label=unicode('Пионер', 'utf-8'))
 
     description = forms.CharField(label=unicode('Тема и описание', 'utf-8'), max_length=400, widget=forms.Textarea)
 
-    score = forms.IntegerField(label=unicode('Оценка [0, 40]', 'utf-8'), max_value=40, min_value=0)
+    score = forms.IntegerField(label=unicode('Оценка [-4, 20]', 'utf-8'), max_value=20, min_value=-4)
 
 
 class P2PTransForm(forms.Form):
@@ -68,7 +68,21 @@ class P2PTransForm(forms.Form):
 
 
     recipient = RecipientModelChoiceField(
-        queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'), label=unicode('Получатель','utf-8'))
+        queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr', 'user__last_name'),
+        label=unicode('Получатель', 'utf-8'))
     description = forms.CharField(max_length=400, widget=forms.Textarea, label=unicode('Описание', 'utf-8'))
 
     value = forms.IntegerField(label=unicode('Сумма', 'utf-8'), min_value=0)
+
+
+class FineTransForm(forms.Form):
+    recipient = RecipientModelChoiceField(queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr',
+                                                                                                                'user__last_name'),
+                                          label=unicode('Пионер', 'utf-8'))
+
+
+    type = forms.ModelChoiceField(queryset=TransactionType.objects.all().filter(group1='fine'),
+                                  label=unicode('Тип штрафа', 'utf-8'))
+    value = forms.IntegerField(label=unicode('Сумма штрафа', 'utf-8'), max_value=2000, min_value=0, help_text=unicode('Ну в 90% случаев штрафуют за мат 10 бачей (c)Ахмеджанов', 'utf-8'))
+
+    description = forms.CharField(label=unicode('Пояснение', 'utf-8'), max_length=1000, widget=forms.Textarea)

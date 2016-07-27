@@ -322,6 +322,36 @@ def add_sem(request):
         form = SeminarTransForm()
         return render(request, 'bank/add_trans/trans_add_seminar.html', {'form': form})
 
+@permission_required('bank.add_transaction',login_url='bank:index')
+def add_fine(request):
+
+    if request.method == "POST":
+
+        form = FineTransForm(request.POST)
+        if form.is_valid():
+
+            value = form.cleaned_data['value']
+
+            recipient = form.cleaned_data['recipient'].user
+            description = form.cleaned_data['description']
+            creator = request.user
+
+            type = form.cleaned_data['type']
+            status = TransactionStatus.objects.get(name='PR')
+
+            new_trans = Transaction.create_trans(recipient=recipient, value=value, creator=creator,
+                                                 description=description,
+                                                 type=type, status=status)
+
+            return render(request, 'bank/add_trans/trans_add_ok.html', {'transactions': [new_trans]})
+        return render(request, 'bank/add_trans/trans_add_fine.html', {'form': form})
+
+
+    else:
+
+        form = FineTransForm()
+        return render(request, 'bank/add_trans/trans_add_fine.html', {'form': form})
+
 
 @permission_required('bank.add_transaction',login_url='bank:index')
 def add_lab(request):

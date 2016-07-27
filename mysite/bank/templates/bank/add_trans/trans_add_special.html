@@ -12,7 +12,7 @@
 </h1>
 <form method="POST" class="post-form" role="form">
     {% csrf_token %}
-
+<h4>Здесь мы начисляем только положительные суммы хорошим пионерам, если хотите начислить штраф, воспользуйтесь <a href="{% url 'bank:add_fine'%}"> специальной формой</a></h4>
     {% bootstrap_form form %}
     {% buttons submit='OK' reset="Очистить" %}{% endbuttons %}
 

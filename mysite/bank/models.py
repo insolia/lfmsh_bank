@@ -50,7 +50,7 @@ class Account(models.Model):
         return 1
 
     def sem_read(self):
-        a = Transaction.objects.filter(recipient=self.user, type=TransactionType.objects.get(name='Seminar'), value__gte=0)
+        a = Transaction.objects.filter(recipient=self.user, type=TransactionType.objects.get(name='Seminar'))
         return len(a)
 
 
@@ -114,6 +114,9 @@ class Transaction(models.Model):
 
         if 'pioner' in creator.groups.filter(name__in=['pioner']) and type.name != 'p2p':
             raise StandardError('While creating transaction. Pioner tried to create not p2p trans ')
+
+        if type.group1 == 'fine':
+            value = - value
 
         new_trans = cls(recipient=recipient, value=value, creator=creator, description=description,
                         type=type, status=status)
@@ -183,7 +186,7 @@ class Transaction(models.Model):
         return self.creation_date.strftime("%d.%m.%Y %H:%M")
 
     def get_value(self):
-        if abs(self.value) > 9.99:
+        if abs(self.value) > 9.9:
 
             return int(self.value)
         return round(self.value, 1)
