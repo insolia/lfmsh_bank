@@ -1,6 +1,9 @@
+# coding=utf-8
 zaryadka_budget = 40.
 p2p_buf = 40.
 p2p_proc = 0.7
+daily_tax = -20
+
 
 activity_money = {1 : 20, 2: 15, 3: 10, 4: 5}
 
@@ -35,3 +38,7 @@ def seminar(score):
         return score*5
     else:
         return score * 10
+
+
+def get_tax_desc():
+    return unicode('В жизни есть только две неизбежных вещи, смерть и налоги','utf-8')

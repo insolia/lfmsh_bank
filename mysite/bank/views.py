@@ -178,7 +178,7 @@ def add_zaryadka(request):
         print value
         description = request.POST['description']
         creator = request.user
-        type = TransactionType.objects.get(name='Zaryadka')
+        type = TransactionType.objects.get(name='zaryadka')
 
         status = TransactionStatus.objects.get(name='PR')
 
@@ -201,7 +201,14 @@ def add_zaryadka(request):
         users['3'] = User.objects.filter(groups__name='pioner').filter(account__otr=3).order_by('last_name')
         users['4'] = User.objects.filter(groups__name='pioner').filter(account__otr=4).order_by('last_name')
 
-        return render(request, 'bank/add_trans/trans_add_zaryadka.html', {'users': users, 'table': 'bank/add_trans/otr_tables/zaryadka_table.html', 'list' : [1,2,3,4]})
+        table = []
+        for i in xrange(4):
+            table.append(ZarTable(User.objects.filter(groups__name='pioner').filter(account__otr=i+1),order_by='name'))
+            RequestConfig(request).configure(table[i])
+            table[i].paginate(per_page=100)
+
+
+        return render(request, 'bank/add_trans/trans_add_zaryadka.html', {'users': users, 'table':table})
 
 
 @permission_required('bank.add_transaction',login_url='bank:index')
@@ -222,7 +229,7 @@ def add_fac(request):
 
         description = request.POST['description']
         creator = request.user
-        type = TransactionType.objects.get(name='fac_pass')
+        type = TransactionType.objects.get(name='fac')
 
         status = TransactionStatus.objects.get(name='PR')
 
@@ -313,7 +320,7 @@ def add_sem(request):
             description = form.cleaned_data['description']
             creator = request.user
 
-            type = TransactionType.objects.get(name='Seminar')
+            type = TransactionType.objects.get(name='sem')
             status = TransactionStatus.objects.get(name='PR')
 
             new_trans = Transaction.create_trans(recipient=recipient, value=value, creator=creator,
@@ -373,7 +380,7 @@ def add_lab(request):
             description = form.cleaned_data['description']
             creator = request.user
 
-            type = TransactionType.objects.get(name='lab_pass')
+            type = TransactionType.objects.get(name='lab')
             status = TransactionStatus.objects.get(name='PR')
 
             new_trans = Transaction.create_trans(recipient=recipient, value=value, creator=creator,
@@ -522,7 +529,7 @@ def manage_p2p(request):
 
 @permission_required('bank.see_super_table',login_url='bank:index')
 def super_table(request):
-    table = TransTable(Transaction.objects.all())
+    table = TransTable(Transaction.objects.all(),order_by='-creation_date')
     RequestConfig(request).configure(table)
     return render(request, 'bank/s_table.html', {'trans': table})
 

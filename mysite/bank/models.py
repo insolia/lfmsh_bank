@@ -69,7 +69,7 @@ class Account(models.Model):
 
 class TransactionType(models.Model):
     name = models.CharField(max_length=30)
-    human_name = models.CharField(max_length=30, default='Other')
+    human_name = models.CharField(max_length=100, default='Other')
     group1 = models.CharField(max_length=30, blank=True, null=True)
     group2 = models.CharField(max_length=30, blank=True, null=True)
 

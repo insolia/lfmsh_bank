@@ -30,7 +30,18 @@ class PionerOtrTable(tables.Table):
 
 
     name = tables.LinkColumn('bank:trans_list', args=[A('username')], accessor='account.long_name', verbose_name=unicode('Пионер','utf-8'), order_by='last_name')
-    balance = tables.Column(accessor='account.get_balance', verbose_name=unicode('Баланс','utf-8'), order_by='account.balance')
+    balance = tables.Column(accessor='account.get_balance', verbose_name=unicode('Баланс','utf-8'), order_by='account.balance', attrs={'td': {'class': 'text-right text'}})
 
     def render_balance(self, value):
         return str(value) + '@'
+
+
+class ZarTable(tables.Table):
+    class Meta:
+
+        attrs = {'class': 'paleblue table table-striped'}
+
+
+    name = tables.Column(accessor='account.long_name', verbose_name=unicode('Пионер','utf-8'), order_by='last_name')
+
+    check = tables.TemplateColumn('<input type="checkbox" name="{{record.username}}_check" value="0">',verbose_name=unicode('Посетил','utf-8'))
