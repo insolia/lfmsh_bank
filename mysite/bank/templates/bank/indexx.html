@@ -51,10 +51,9 @@
 <br>
 <a href="{% url 'bank:my_trans' %}"> Посмотреть свои транзакции</a>
 <br>
-
-{% if 'bank.add_p2p_transaction' in request.user.get_all_permissions %}
 <br>
 
+{% if user_group == 'pioner' %}
 {% if user.account.balance > 40 %}
 <a href="{% url 'bank:add_p2p' %}"> Подать заявку на личный перевод</a>
 {% else %}

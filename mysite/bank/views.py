@@ -43,7 +43,14 @@ def all_pioner_accounts(request):
     accounts['3'] = Account.objects.filter(user__groups__name='pioner').filter(otr=3).order_by('user__last_name')
     accounts['4'] = Account.objects.filter(user__groups__name='pioner').filter(otr=4).order_by('user__last_name')
 
-    return render(request, template_name, {'accounts': accounts, 'table': 'bank/add_trans/otr_tables/activity_table.html', 'list' : [1,2,3,4]})
+    table = []
+
+    for i in xrange(4):
+        table.append(PionerOtrTable(User.objects.filter(groups__name='pioner').filter(account__otr=i+1),order_by='name'))
+        RequestConfig(request).configure(table[i])
+        table[i].paginate(per_page=100)
+
+    return render(request, template_name, {'accounts': accounts, 'table': table})
 
 @login_required
 @permission_required('bank.view_ped_trans_list')
@@ -515,14 +522,6 @@ def manage_p2p(request):
 
 @permission_required('bank.see_super_table',login_url='bank:index')
 def super_table(request):
-    if not request.user.is_authenticated():
-        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
-
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-
-    if user_group_name != 'admin':
-        return redirect(reverse('bank:index'))
-
     table = TransTable(Transaction.objects.all())
     RequestConfig(request).configure(table)
     return render(request, 'bank/s_table.html', {'trans': table})

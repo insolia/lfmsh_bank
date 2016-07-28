@@ -1,5 +1,10 @@
+# coding=utf-8
 import django_tables2 as tables
 from .models import *
+from django_tables2.utils import A  # alias for Accessor
+
+# -*- coding: utf-8 -*-
+
 
 class TransTable(tables.Table):
     class Meta:
@@ -16,3 +21,16 @@ class TransTable(tables.Table):
 
     def render_recipient(self, value):
         return value.account
+
+
+class PionerOtrTable(tables.Table):
+    class Meta:
+
+        attrs = {'class': 'paleblue table table-striped'}
+
+
+    name = tables.LinkColumn('bank:trans_list', args=[A('username')], accessor='account.long_name', verbose_name=unicode('Пионер','utf-8'), order_by='last_name')
+    balance = tables.Column(accessor='account.get_balance', verbose_name=unicode('Баланс','utf-8'), order_by='account.balance')
+
+    def render_balance(self, value):
+        return str(value) + '@'
