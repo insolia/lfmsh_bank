@@ -12,39 +12,7 @@
 </div>
 
 
-{% if user_group == 'pioner' %}
 
-
-<div class="row">
-    <div class="col-sm-12 col-sm-offset-0">
-        <div class="text-left">
-            <h3> Ваш баланс  {{request.user.account.get_balance}} @</h3>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-sm-4 ">
-        <div class="text-left">
-            <h5> Вы сделали {{request.user.account.lab_passed}} лаб из {{request.user.account.lab_needed}} необходимых</h5>
-        </div>
-    </div>
-
-     <div class="col-sm-4 ">
-        <div class="text-left">
-            <h5> Вы получили {{request.user.account.fac_passed}} зачетов по факультативу. Надо минимум {{request.user.account.fac_needed}}</h5>
-        </div>
-    </div>
-    <div class="col-sm-4 ">
-        <div class="text-left">
-            <h5> Вы прочитали {{request.user.account.sem_read}} семинаров. Надо минимум 1</h5>
-        </div>
-    </div>
-
-</div>
-
-
-{%endif%}
 
 <br>
 
@@ -52,15 +20,6 @@
 <a href="{% url 'bank:my_trans' %}"> Посмотреть свои транзакции</a>
 <br>
 <br>
-
-{% if user_group == 'pioner' %}
-{% if user.account.balance > 40 %}
-<a href="{% url 'bank:add_p2p' %}"> Подать заявку на личный перевод</a>
-{% else %}
-<p>Вы не можете отправлять личные переводы пока у вас на счету меньше {{p2p_buf}}@</p>
-
-{%endif%}
-{%endif%}
 
 
 

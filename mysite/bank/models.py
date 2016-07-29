@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+import helper_functions as hf
 
 # Create your models here.
 
@@ -17,9 +17,11 @@ class Account(models.Model):
     otr = models.IntegerField(default=1)
 
     grade = models.IntegerField(blank=True, default=8)
+
     lab_passed = models.IntegerField(blank=True, default=0)
     fac_passed = models.IntegerField(blank=True, default=0)
     sem_attend = models.IntegerField(blank=True, default=0)
+    lec_missed = models.IntegerField(blank=True, default=0)
 
 
     def __unicode__(self):
@@ -49,10 +51,35 @@ class Account(models.Model):
             return 0
         return 1
 
-    def sem_read(self):
-        a = Transaction.objects.filter(recipient=self.user, type=TransactionType.objects.get(name='Seminar'))
-        return len(a)
+    def sem_att_needed(self):
 
+        return hf.sem_needed
+
+
+
+    def sem_att_w(self):
+
+
+        print 100 * int(self.sem_attend)/self.sem_att_needed()
+        return max(10,100 * int(self.sem_attend)/self.sem_att_needed())
+
+    def lab_passed_w(self):
+
+        print 100 * int(self.lab_passed)/self.lab_needed()
+        return max(100 * int(self.lab_passed)/self.lab_needed(),10)
+
+    def fac_passed_w(self):
+        if self.fac_needed():
+            print 100 * int(self.fac_passed)/self.fac_needed()
+            return max(100 * int(self.fac_passed)/self.fac_needed(),10)
+
+    def sem_read_w(self):
+        a = Transaction.objects.filter(recipient=self.user, type=TransactionType.objects.get(name='sem'))
+        print len(a)*100
+        return max(len(a)*100, 10)
+    def sem_read(self):
+        a = Transaction.objects.filter(recipient=self.user, type=TransactionType.objects.get(name='sem'))
+        return len(a)
 
     def can_add_trans(self):
         '''if self.user.groups.filter(name__in=['pedsostav', 'admin']):
