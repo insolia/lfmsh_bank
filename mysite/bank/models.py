@@ -14,14 +14,15 @@ class Account(models.Model):
     balance = models.FloatField(default=0)
     third_name = models.CharField(max_length=40, default='Not stated')
 
-    otr = models.IntegerField(default=1)
+    otr = models.IntegerField(default=0)
 
-    grade = models.IntegerField(blank=True, default=8)
+    grade = models.IntegerField(blank=True, default=0)
 
     lab_passed = models.IntegerField(blank=True, default=0)
     fac_passed = models.IntegerField(blank=True, default=0)
-    sem_attend = models.IntegerField(blank=True, default=0)
+    sem_fac_attend = models.IntegerField(blank=True, default=0)
     lec_missed = models.IntegerField(blank=True, default=0)
+    sem_read = models.IntegerField(blank=True, default=0)
 
 
     def __unicode__(self):
@@ -58,10 +59,8 @@ class Account(models.Model):
 
 
     def sem_att_w(self):
-
-
-        print 100 * int(self.sem_attend)/self.sem_att_needed()
-        return max(10,100 * int(self.sem_attend)/self.sem_att_needed())
+        print 100 * int(self.sem_fac_attend)/self.sem_att_needed()
+        return max(10,100 * int(self.sem_fac_attend)/self.sem_att_needed())
 
     def lab_passed_w(self):
 
@@ -74,17 +73,8 @@ class Account(models.Model):
             return max(100 * int(self.fac_passed)/self.fac_needed(),10)
 
     def sem_read_w(self):
-        a = Transaction.objects.filter(recipient=self.user, type=TransactionType.objects.get(name='sem'))
-        print len(a)*100
-        return max(len(a)*100, 10)
-    def sem_read(self):
-        a = Transaction.objects.filter(recipient=self.user, type=TransactionType.objects.get(name='sem'))
-        return len(a)
 
-    def can_add_trans(self):
-        '''if self.user.groups.filter(name__in=['pedsostav', 'admin']):
-            return True'''
-        return self.user.has_perm('bank.add_transaction')
+        return int(self.sem_read) * 100
 
 
     def get_balance(self):
@@ -108,8 +98,6 @@ class TransactionStatus(models.Model):
     name = models.CharField(max_length=30)
     human_name = models.CharField(max_length=30)
     counted = models.BooleanField(default=False)
-    group1 = models.CharField(max_length=30, blank=True, null=True)
-    group2 = models.CharField(max_length=30, blank=True, null=True)
 
     def __unicode__(self):
         return self.human_name
@@ -139,8 +127,7 @@ class Transaction(models.Model):
     @classmethod
     def create_trans(cls, recipient, value, creator, description, type, status):
 
-        if 'pioner' in creator.groups.filter(name__in=['pioner']) and type.name != 'p2p':
-            raise StandardError('While creating transaction. Pioner tried to create not p2p trans ')
+
 
         if type.group1 == 'fine':
             value = - value
@@ -153,15 +140,7 @@ class Transaction(models.Model):
         else:
             new_trans.save()
 
-        if type.name == 'fac_pass':
-            a = new_trans.recipient.account
-            a.fac_passed += 1
-            a.save()
-
-        if type.name == 'lab_pass':
-            a = new_trans.recipient.account
-            a.lab_passed += 1
-            a.save()
+        new_trans.do_counters(1)
 
         return new_trans
 
@@ -184,6 +163,29 @@ class Transaction(models.Model):
         return True
 
 
+    def do_counters(self,value):
+
+        if self.type.name == 'fac_pass':
+            a = self.recipient.account
+            a.fac_passed += value
+            a.save()
+
+        if self.type.name == 'lab_pass':
+            a = self.recipient.account
+            a.lab_passed += value
+            a.save()
+
+        if self.type.name == 'sem':
+            a = self.recipient.account
+            a.sem_read += value
+            a.save()
+
+        if self.type.name == 'sem_attend' or self.type.name == 'fac_attend':
+            a = self.recipient.account
+            a.sem_fac_attend += value
+            a.save()
+
+
     def cancel(self):
 
         if not self.counted:
@@ -199,6 +201,9 @@ class Transaction(models.Model):
 
         self.counted = False
         self.save()
+
+        self.do_counters(-1)
+
         return True
 
 

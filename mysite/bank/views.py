@@ -15,6 +15,7 @@ from django_tables2 import RequestConfig
 from .tables import *
 from django.utils import timezone
 import helper_functions as hf
+from constants import *
 
 
 
@@ -22,14 +23,19 @@ import helper_functions as hf
 # Create your views here.
 @login_required
 def index(request):
-    print request.user.account.can_add_trans()
 
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-    p2p_unmanaged_len = len(Transaction.objects.filter(status__name='AD'))
     print user_group_name
     if user_group_name == 'pioner':
         lec_pen = hf.lec_pen(request.user.account.lec_missed)
+
         return render(request, 'bank/index_pio.html', {'user_group': user_group_name, 'p2p_buf':hf.p2p_buf, 'lec_pen':lec_pen})
+    elif user_group_name == 'pedsostav':
+        return render(request, 'bank/indexx.html', {'user_group': user_group_name})
+
+
+    p2p_unmanaged_len = len(Transaction.objects.filter(status__name='AD'))
+
     return render(request, 'bank/indexx.html', {'user_group': user_group_name, 'unm_len': p2p_unmanaged_len})
 
 @login_required
@@ -40,31 +46,24 @@ def all_pioner_accounts(request):
 
     template_name = 'bank/user_lists/pioner_list.html'
 
-    accounts = {}
-    accounts['1'] = Account.objects.filter(user__groups__name='pioner').filter(otr=1).order_by('user__last_name')
-    accounts['2'] = Account.objects.filter(user__groups__name='pioner').filter(otr=2).order_by('user__last_name')
-    accounts['3'] = Account.objects.filter(user__groups__name='pioner').filter(otr=3).order_by('user__last_name')
-    accounts['4'] = Account.objects.filter(user__groups__name='pioner').filter(otr=4).order_by('user__last_name')
 
     table = []
 
-    for i in xrange(4):
+    for i in xrange(NUMBER_OF_OTR):
         table.append(PionerOtrTable(User.objects.filter(groups__name='pioner').filter(account__otr=i+1),order_by='name'))
         RequestConfig(request).configure(table[i])
         table[i].paginate(per_page=100)
 
-    return render(request, template_name, {'accounts': accounts, 'table': table})
+    return render(request, template_name, { 'table': table})
 
 @login_required
-@permission_required('bank.view_ped_trans_list')
+@permission_required('bank.view_ped_trans_list',login_url='bank:index')
 def all_ped_accounts(request):
 
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-    if user_group_name == 'pioner':
-        return redirect(reverse('bank:index'))
+
 
     template_name = 'bank/user_lists/ped_list.html'
-    accounts = Account.objects.filter(user__groups__name='pedsostav').order_by('-balance')
+    accounts = Account.objects.filter(user__groups__name='pedsostav').order_by('user__last_name')
     return render(request, template_name, {'accounts': accounts})
 
 @login_required
@@ -168,14 +167,15 @@ def add_zaryadka(request):
 
 
     if request.method == "POST":
-        if len(request.POST) < 3:
-            return redirect(reverse('bank:index'))
 
         zar_attendants = []
 
         for u in User.objects.filter(groups__name='pioner'):
             if u.username + '_check' in request.POST:
                 zar_attendants.append(u)
+
+        if not zar_attendants:
+            return redirect(reverse('bank:index'))
 
         value = hf.zaryadka(len(zar_attendants))
         print value
@@ -198,20 +198,15 @@ def add_zaryadka(request):
             users = User.objects.filter(groups__name='pioner')
             return render(request, 'bank/add_trans/trans_add_zaryadka.html', {'users': users})
     else:
-        users = {}
-        users['1'] = User.objects.filter(groups__name='pioner').filter(account__otr=1).order_by('last_name')
-        users['2'] = User.objects.filter(groups__name='pioner').filter(account__otr=2).order_by('last_name')
-        users['3'] = User.objects.filter(groups__name='pioner').filter(account__otr=3).order_by('last_name')
-        users['4'] = User.objects.filter(groups__name='pioner').filter(account__otr=4).order_by('last_name')
 
         table = []
         for i in xrange(4):
             table.append(ZarTable(User.objects.filter(groups__name='pioner').filter(account__otr=i+1),order_by='name'))
             RequestConfig(request).configure(table[i])
-            table[i].paginate(per_page=100)
+            table[i].paginate(per_page=1000)
 
 
-        return render(request, 'bank/add_trans/trans_add_zaryadka.html', {'users': users, 'table':table})
+        return render(request, 'bank/add_trans/trans_add_zaryadka.html', { 'table':table})
 
 
 @permission_required('bank.add_transaction',login_url='bank:index')
@@ -258,7 +253,6 @@ def add_fac(request):
         return render(request, 'bank/add_trans/trans_add_fac.html', {'users': users, 'table': 'bank/add_trans/otr_tables/fac_table.html', 'list' : [1,2,3,4]})
 
 
-
 @permission_required('bank.add_transaction',login_url='bank:index')
 def add_activity(request):
 
@@ -270,7 +264,7 @@ def add_activity(request):
 
 
         for u in User.objects.filter(groups__name='pioner'):
-            if str(u.pk) + '_place' in request.POST and request.POST[str(u.pk) + '_place']:
+            if str(u.pk) + '_place' in request.POST and request.POST[str(u.pk) + '_place']and int(request.POST[str(u.pk) + '_place']) != 5:
 
                 f = 1
                 participants[int(request.POST[str(u.pk) + '_place'])].append(u)
@@ -283,12 +277,12 @@ def add_activity(request):
         type = TransactionType.objects.get(name=request.POST['type'])
 
         status = TransactionStatus.objects.get(name='PR')
-
+        activity_money = {1: int(request.POST['1m']),2:int(request.POST['2m']),3:int(request.POST['3m']),4:int(request.POST['4m'])}
         new_transactions = []
         for p in participants:
 
             for u in participants[p]:
-                new_trans = Transaction.create_trans(recipient=u, value=hf.activity_money[p], creator=creator, description=description,
+                new_trans = Transaction.create_trans(recipient=u, value=activity_money[p], creator=creator, description=description,
                                                  type=type, status=status)
                 new_transactions.append(new_trans)
 
@@ -305,7 +299,7 @@ def add_activity(request):
         users['3'] = User.objects.filter(groups__name='pioner').filter(account__otr=3).order_by('last_name')
         users['4'] = User.objects.filter(groups__name='pioner').filter(account__otr=4).order_by('last_name')
 
-        return render(request, 'bank/add_trans/trans_add_activity.html', {'users': users, 'table': 'bank/add_trans/otr_tables/activity_table.html', 'list' : [1,2,3,4]})
+        return render(request, 'bank/add_trans/trans_add_activity.html', {'users': users, 'table': 'bank/add_trans/otr_tables/activity_table.html', 'list' : [1,2,3,4], 'activity': ACTIVITY_MONEY})
 
 
 @permission_required('bank.add_transaction',login_url='bank:index')
@@ -448,20 +442,18 @@ def dec_trans(request, trans_id):
 
 @login_required
 def dec_trans_ok(request, trans_id):
-    if not request.user.is_authenticated():
-        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
 
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
     trans = Transaction.objects.get(pk=trans_id)
-    if trans.creator != request.user and user_group_name != 'admin':
+    if trans.creator != request.user and not request.user.has_perm('del_foreign_trans'):
         return redirect(reverse('bank:index'))
 
     if request.method == "POST":
 
-        # decline of trans happening
-        trans.cancel
+        print'decline of trans happening'
+        trans.cancel()
 
-        if user_group_name == 'admin':
+        if request.user.has_perm('del_foreign_trans') and trans.creator != request.user:
 
             trans.status = TransactionStatus.objects.get(name='DA')
 
@@ -495,13 +487,6 @@ def trans_list(request, username):
 
 @permission_required('bank.manage_trans',login_url='bank:index')
 def manage_p2p(request):
-    if not request.user.is_authenticated():
-        return redirect(('%s?next=%s' % (reverse(settings.LOGIN_URL), request.path)))
-
-    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
-
-    if user_group_name != 'admin':
-        return redirect(reverse('bank:index'))
 
     if request.method == "POST":
 

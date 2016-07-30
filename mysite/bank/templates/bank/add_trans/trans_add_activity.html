@@ -3,6 +3,13 @@
 {% block content %}
 
 
+<script>
+function uncheck(id) {
+    document.getElementById(id).checked = document.getElementById(id).checked ? false : true;
+    alert('js');
+}
+</script>
+
 <form action={% url 'bank:add_activity' %} method="post">
 
 {% csrf_token %}
@@ -24,10 +31,34 @@
                 </div>
 
 </div>
+
+
+<div class="row">
+    <div class="col-sm-3 ">
+        <label for="1_p_s">Первое место: </label>
+
+    <input type="number" id = '1_p_s' name="1m" min="0" value="{{activity.1}}" >
+</div>
+    <div class="col-sm-3 ">
+        <label for="2_p_s">Второе место: </label>
+
+    <input type="number" id = '2_p_s' name="2m" min="0" value="{{activity.2}}" >
+</div>
+
+    <div class="col-sm-3 ">
+        <label for="3_p_s">Третье место: </label>
+
+    <input type="number" id = '3_p_s' name="3m" min="0" value="{{activity.3}}" >
+</div>
+
+    <div class="col-sm-3 ">
+        <label for="4_p_s"> Участники: </label>
+
+    <input type="number" id = '4_p_s' name="4m" min="0" value="{{activity.4}}" >
+</div>
+
+
     </div>
-
-<h5>Согласно действующим правилам первые места получат по 20@ вторые по 15@ третьи по 10@ и участники по 5@</h5>
-
 
 <div class="row">
     {% include table with otr_name='Первый'  user_list=users.1 %}
@@ -43,6 +74,13 @@
 </textarea>
 <br>
 <input type="submit"  class="btn btn-default"/>
+
+<script>
+function uncheck(id) {
+    document.getElementById(id).checked = document.getElementById(id).checked ? false : true;
+    print('js')
+}
+</script>
 
 {% endblock%}
 

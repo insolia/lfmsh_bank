@@ -39,9 +39,7 @@
 
         <td>{{t.get_creation_date}}</td>
 
-        <td>{% if t.value > 0 %}
-            +
-            {% endif %}
+        <td>{% if t.value > 0 %}+{% endif %}
             {{t.value}}@
         </td>
         <td>{{t.creator.account}}</td>

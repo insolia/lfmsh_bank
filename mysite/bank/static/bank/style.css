@@ -1,61 +1,8 @@
-#header {
-        background-color:black;
-        color:white;
-        text-align:center;
-        padding:5px;
-        }
-#section {
-        width:100%;
-        float:left;
-        padding:10px;
-        }
-#footer {
-        background-color:black;
-        color:white;
-        clear:both;
-        text-align:center;
-        padding:5px;
-        }
-#head_table {
-        width:100%
-
+.progress {
+    text-align:center;
 }
-#logout_cell{
-        text-align:right
-        }
-a.head_link:link{
-        color: white;
-        background-color: transparent;
-        text-decoration: none;
-        }
-    a.head_link:visited{
-        color: white;
-        background-color: transparent;
-        text-decoration: none;
-        }
-    a.head_link:hover{
-        color: #4CAF50;
-        background-color: transparent;
-        text-decoration: underline;
-        }
-    p.log_info{
-        color:white;
-        text-align:right}
-
-.trans_table{
-    width: 100%;
-    border: 1px solid black;
-
-    border-collapse: collapse;
-}
-th {
-    background-color: #4CAF50;
-    color: white;
-}
-tr:nth-child(even){
-background-color: #f2f2f2
-}
-th, td {
-    text-align: left;
-    padding: 2px;
+.progress-value {
+    position:absolute;
+    right:0;
+    left:0;
 }

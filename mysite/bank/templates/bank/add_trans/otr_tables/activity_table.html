@@ -1,4 +1,6 @@
- <div class="col-sm-6 ">
+
+
+<div class="col-sm-6 ">
 <div class="panel panel-default">
     <div class="panel-heading">
         {{otr_name}} отряд
@@ -16,17 +18,20 @@
         <td>
 
             <div class="btn-group" data-toggle="buttons">
-                <label class="btn ">
-                    <input type="radio" name="{{u.pk}}_place" value="1" autocomplete="off" > 1
+                <label class="btn " >
+                    <input type="radio" name="{{u.pk}}_place" value="1" id="{{u.pk}}_place_1" autocomplete="off" > 1
                 </label>
-                <label class="btn ">
-                     <input type="radio" name="{{u.pk}}_place" value="2" autocomplete="off"> 2
+                <label class="btn" >
+                     <input type="radio" name="{{u.pk}}_place" value="2" autocomplete="off" id="{{u.pk}}_place_2"  > 2
                 </label>
                 <label class="btn ">
                      <input type="radio" name="{{u.pk}}_place" value="3" autocomplete="off"> 3
                 </label>
                 <label class="btn ">
                      <input type="radio" name="{{u.pk}}_place" value="4" autocomplete="off"> Участник
+                </label>
+                <label class="btn ">
+                     <input type="radio" name="{{u.pk}}_place" value="5" autocomplete="off"> -
                 </label>
                 </div>
 
