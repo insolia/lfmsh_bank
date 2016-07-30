@@ -210,6 +210,50 @@ def add_zaryadka(request):
 
 
 @permission_required('bank.add_transaction',login_url='bank:index')
+def add_lec(request):
+
+
+    if request.method == "POST":
+
+        lec_missers = []
+
+        for u in User.objects.filter(groups__name='pioner'):
+            if u.username + '_check' not in request.POST:
+                lec_missers.append(u)
+
+        if not lec_missers:
+            return redirect(reverse('bank:index'))
+
+
+        description = request.POST['description']
+        creator = request.user
+        type = TransactionType.objects.get(name='fine_lec')
+
+        status = TransactionStatus.objects.get(name='PR')
+
+        new_transactions = []
+        for u in lec_missers:
+            new_trans = Transaction.create_trans(recipient=u, value=hf.lec_pen(u.account.lec_missed), creator=creator, description=description,
+                                                 type=type, status=status)
+            new_transactions.append(new_trans)
+
+        return render(request, 'bank/add_trans/trans_add_ok.html', {'transactions': new_transactions})
+
+
+
+    else:
+
+        table = []
+        for i in xrange(4):
+            table.append(LecTable(User.objects.filter(groups__name='pioner').filter(account__otr=i+1),order_by='name'))
+            RequestConfig(request).configure(table[i])
+            table[i].paginate(per_page=1000)
+
+
+        return render(request, 'bank/add_trans/trans_add_lec.html', { 'table':table})
+
+
+@permission_required('bank.add_transaction',login_url='bank:index')
 def add_fac(request):
 
 
@@ -301,7 +345,6 @@ def add_activity(request):
 
         return render(request, 'bank/add_trans/trans_add_activity.html', {'users': users, 'table': 'bank/add_trans/otr_tables/activity_table.html', 'list' : [1,2,3,4], 'activity': ACTIVITY_MONEY})
 
-
 @permission_required('bank.add_transaction',login_url='bank:index')
 def add_sem(request):
 
@@ -362,7 +405,6 @@ def add_fine(request):
 
         form = FineTransForm()
         return render(request, 'bank/add_trans/trans_add_fine.html', {'form': form})
-
 
 @permission_required('bank.add_transaction',login_url='bank:index')
 def add_lab(request):

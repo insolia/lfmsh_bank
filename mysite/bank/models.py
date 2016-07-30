@@ -174,7 +174,10 @@ class Transaction(models.Model):
             a = self.recipient.account
             a.lab_passed += value
             a.save()
-
+        if self.type.name == 'fine_lec':
+            a = self.recipient.account
+            a.lec_missed += value
+            a.save()
         if self.type.name == 'sem':
             a = self.recipient.account
             a.sem_read += value

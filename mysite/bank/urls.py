@@ -25,6 +25,7 @@ urlpatterns = patterns('',
                        url(r'^add_trans/lab/', views.add_lab, name='add_lab'),
                        url(r'^add_trans/activity/', views.add_activity, name='add_activity'),
                        url(r'^add_trans/fine/', views.add_fine, name='add_fine'),
+                       url(r'^add_trans/lec/', views.add_lec, name='add_lec'),
 
                        url(r'^dec_trans/(?P<trans_id>[0-9]+)/$', views.dec_trans, name='trans_dec'),
                        url(r'^dec_trans_ok/(?P<trans_id>[0-9]+)/$', views.dec_trans_ok, name='trans_dec_ok'),
