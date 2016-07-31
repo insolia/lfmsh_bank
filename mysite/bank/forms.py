@@ -5,6 +5,8 @@ from django.contrib.auth.models import User, Group
 from django.forms import ModelChoiceField
 import helper_functions as hf
 from dal import autocomplete
+import datetime
+
 
 # -*- coding: utf-8 -*-
 
@@ -47,11 +49,16 @@ class LabTransForm(forms.Form):
 class SeminarTransForm(forms.Form):
     recipient = RecipientModelChoiceField(queryset=Account.objects.filter(user__groups__name='pioner').order_by('otr',
                                                                                                                 'user__last_name'),
-                                          label=unicode('Пионер', 'utf-8'))
+                                          label=unicode('Расказчик', 'utf-8'))
 
     description = forms.CharField(label=unicode('Тема и описание', 'utf-8'), max_length=400, widget=forms.Textarea)
 
-    score = forms.IntegerField(label=unicode('Оценка [-4, 20]', 'utf-8'), max_value=20, min_value=-4)
+    date = forms.DateField(initial=datetime.date.today)
+
+
+class FacAttTransForm(forms.Form):
+    date = forms.DateField(initial=datetime.date.today)
+    description = forms.CharField(label=unicode('Название факультатива, возможно описание занятия', 'utf-8'), max_length=400, widget=forms.Textarea)
 
 
 class P2PTransForm(forms.Form):

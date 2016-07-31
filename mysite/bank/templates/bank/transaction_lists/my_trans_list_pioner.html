@@ -25,15 +25,16 @@
     </tr>
     {% for t in in_trans %}
 
-    {% if t.status.name = 'PR' %}
+
+    {% if t.type.group1 = 'fee' %}
     <tr class="success">
-        {% endif %}
-
-        {% if t.status.name = 'AD' %}
+    {% elif t.type.group1 = 'fine' %}
+    <tr class="danger">
+    {%else%}
     <tr class="warning">
-        {% endif %}
+    {% endif %}
 
-        {% if t.status.name != 'DA' and t.status.name != 'DC' %}
+
 
 
 
@@ -48,7 +49,6 @@
         <td>{{t.description}}</td>
     </tr>
 
-    {% endif %}
     {% endfor %}
 </table>
 
@@ -113,6 +113,34 @@
 
 {% else %}
 <p>У Вас нет исходящих транзакций.</p>
+{% endif %}
+
+{% if attends %}
+
+<h5>Засчитаны  посещения</h5>
+
+<table class='table table-striped' >
+        <tr>
+            <th>Засчитано</th>
+            <th>Посещение</th>
+            <th>Дата и время</th>
+
+        </tr>
+
+    {% for a in attends %}
+        <tr>
+            <td>{{a.counted}}</td>
+
+            <td>{{a.type.human_name}}</td>
+            <td>{{a.get_value_as_date}}</td>
+
+        </tr>
+
+    {% endfor %}
+
+
+</table>
+
 {% endif %}
 
 {% endblock %}

@@ -1,3 +1,5 @@
+# coding=utf-8
+
 from django.db import models
 from django.contrib.auth.models import User
 import helper_functions as hf
@@ -57,20 +59,19 @@ class Account(models.Model):
         return hf.sem_needed
 
 
-
     def sem_att_w(self):
-        print 100 * int(self.sem_fac_attend)/self.sem_att_needed()
-        return max(10,100 * int(self.sem_fac_attend)/self.sem_att_needed())
+        print 100 * int(self.sem_fac_attend) / self.sem_att_needed()
+        return (100 * int(self.sem_fac_attend) / self.sem_att_needed())
 
     def lab_passed_w(self):
 
-        print 100 * int(self.lab_passed)/self.lab_needed()
-        return max(100 * int(self.lab_passed)/self.lab_needed(),10)
+        print 100 * int(self.lab_passed) / self.lab_needed()
+        return (100 * int(self.lab_passed) / self.lab_needed())
 
     def fac_passed_w(self):
         if self.fac_needed():
-            print 100 * int(self.fac_passed)/self.fac_needed()
-            return max(100 * int(self.fac_passed)/self.fac_needed(),10)
+            print 100 * int(self.fac_passed) / self.fac_needed()
+            return (100 * int(self.fac_passed) / self.fac_needed())
 
     def sem_read_w(self):
 
@@ -79,7 +80,6 @@ class Account(models.Model):
 
     def get_balance(self):
         if abs(self.balance) > 9.99:
-
             return int(self.balance)
         return round(self.balance, 1)
 
@@ -128,7 +128,6 @@ class Transaction(models.Model):
     def create_trans(cls, recipient, value, creator, description, type, status):
 
 
-
         if type.group1 == 'fine':
             value = - value
 
@@ -136,11 +135,11 @@ class Transaction(models.Model):
                         type=type, status=status)
 
         if status.name == 'PR':
-            new_trans.count()
+            a = new_trans.count()
+            if a:
+                new_trans.do_counters(1)
         else:
             new_trans.save()
-
-        new_trans.do_counters(1)
 
         return new_trans
 
@@ -150,30 +149,37 @@ class Transaction(models.Model):
         if self.counted:
             return False
 
-        a = self.recipient.account
-        a.balance = a.balance + self.value
-        a.save()
+        if self.type.group1 != 'attend':
+            a = self.recipient.account
+            a.balance = a.balance + self.value
+            a.save()
 
-        a = self.creator.account
-        a.balance = a.balance - self.value
-        a.save()
+            a = self.creator.account
+            a.balance = a.balance - self.value
+            a.save()
 
         self.counted = True
         self.save()
         return True
 
 
-    def do_counters(self,value):
+    def do_counters(self, value):
 
         if self.type.name == 'fac_pass':
             a = self.recipient.account
             a.fac_passed += value
             a.save()
 
+        if self.type.group1 == 'attend':
+            a = self.recipient.account
+            a.sem_fac_attend += value
+            a.save()
+
         if self.type.name == 'lab_pass':
             a = self.recipient.account
             a.lab_passed += value
             a.save()
+
         if self.type.name == 'fine_lec':
             a = self.recipient.account
             a.lec_missed += value
@@ -183,29 +189,26 @@ class Transaction(models.Model):
             a.sem_read += value
             a.save()
 
-        if self.type.name == 'sem_attend' or self.type.name == 'fac_attend':
-            a = self.recipient.account
-            a.sem_fac_attend += value
-            a.save()
-
 
     def cancel(self):
+
 
         if not self.counted:
             return False
 
-        a = self.recipient.account
-        a.balance = a.balance - self.value
-        a.save()
+        self.do_counters(-1)
 
-        a = self.creator.account
-        a.balance = a.balance + self.value
-        a.save()
+        if self.type.group1 != 'attend':
+            a = self.recipient.account
+            a.balance = a.balance - self.value
+            a.save()
+
+            a = self.creator.account
+            a.balance = a.balance + self.value
+            a.save()
 
         self.counted = False
         self.save()
-
-        self.do_counters(-1)
 
         return True
 
@@ -222,6 +225,12 @@ class Transaction(models.Model):
 
     def get_value(self):
         if abs(self.value) > 9.9:
-
             return int(self.value)
         return round(self.value, 1)
+
+    def get_value_as_date(self):
+        year = 2000 + int(self.value) // 100000
+        month = (int(self.value) // 1000) % 100
+        day = (int(self.value) // 10) % 100
+        block = (int(self.value) ) % 10
+        return unicode('{0}.{1}.{2} {3} блок'.format(year, month, day, block), 'utf-8')
