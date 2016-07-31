@@ -157,6 +157,9 @@ class Transaction(models.Model):
             a = self.creator.account
             a.balance = a.balance - self.value
             a.save()
+        else:
+            if Transaction.objects.filter(value=self.value).filter(recipient=self.recipient).filter(counted=True):
+                return False
 
         self.counted = True
         self.save()
@@ -196,7 +199,7 @@ class Transaction(models.Model):
         if not self.counted:
             return False
 
-        self.do_counters(-1)
+
 
         if self.type.group1 != 'attend':
             a = self.recipient.account
@@ -206,7 +209,13 @@ class Transaction(models.Model):
             a = self.creator.account
             a.balance = a.balance + self.value
             a.save()
+        else:
+            if len(Transaction.objects.filter(value=self.value).filter(recipient=self.recipient).filter(counted=True)) != 1:
+                self.counted = False
+                self.save()
+                return False
 
+        self.do_counters(-1)
         self.counted = False
         self.save()
 
