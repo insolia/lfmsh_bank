@@ -121,7 +121,6 @@
 
 <table class='table table-striped' >
         <tr>
-            <th>Засчитано</th>
             <th>Посещение</th>
             <th>Дата и время</th>
 
@@ -129,7 +128,6 @@
 
     {% for a in attends %}
         <tr>
-            <td>{{a.counted}}</td>
 
             <td>{{a.type.human_name}}</td>
             <td>{{a.get_value_as_date}}</td>

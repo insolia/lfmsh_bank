@@ -5,6 +5,7 @@ import csv
 from transliterate import translit
 from django.contrib.auth.models import Group
 import random
+from bank.constants import *
 
 
 def get_pd(str):
@@ -23,7 +24,7 @@ for p in csv.reader(p_f):
     tn = p[2].decode('utf-8')
 
     grad = p[3].decode('utf-8')
-    otr = random.randint(1,4)
+    otr = random.randint(1, 4)
 
     login = translit(fn[0], 'ru', reversed=True) + translit(tn[0], 'ru', reversed=True) + translit(ln, 'ru',
                                                                                                    reversed=True)
@@ -36,6 +37,9 @@ for p in csv.reader(p_f):
     new_a = Account(user=new_u, third_name=tn, grade=grad, otr=otr)
     new_a.save()
 
+    initial = Transaction.create_trans(recipient=new_u, creator=User.objects.get(username='admin'), value=INITIAL_MONEY,
+                                       description=INITIAL_MONEY_DESC, type=TransactionType.objects.get(name='initial'),
+                                       status=TransactionStatus.objects.get(name="PR"))
     print ln + ' ' + fn + '\n' + 'login: ' + login + ' password: ' + pd
     info = ln + ' ' + fn + '\n' + 'login: ' + login + ' password: ' + pd
 

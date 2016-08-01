@@ -3,6 +3,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import helper_functions as hf
+from constants import *
 
 # Create your models here.
 
@@ -89,7 +90,8 @@ class TransactionType(models.Model):
     human_name = models.CharField(max_length=100, default='Other')
     group1 = models.CharField(max_length=30, blank=True, null=True)
     group2 = models.CharField(max_length=30, blank=True, null=True)
-
+    group1_hn =  models.CharField(max_length=100, default='Other')
+    group2_hn =  models.CharField(max_length=100, default='Other')
     def __unicode__(self):
         return self.human_name
 
@@ -158,7 +160,8 @@ class Transaction(models.Model):
             a.balance = a.balance - self.value
             a.save()
         else:
-            if Transaction.objects.filter(value=self.value).filter(recipient=self.recipient).filter(counted=True):
+            #return false if attend is imposible
+            if Transaction.objects.filter(recipient=self.recipient).filter(value__in=[((int(self.value)//100) * 100 + a) for a in SF_IMPOSIBLE[int(self.value) % 100]]).filter(counted=True):
                 return False
 
         self.counted = True
@@ -238,8 +241,10 @@ class Transaction(models.Model):
         return round(self.value, 1)
 
     def get_value_as_date(self):
-        year = 2000 + int(self.value) // 100000
-        month = (int(self.value) // 1000) % 100
-        day = (int(self.value) // 10) % 100
+        year = 2000 + int(self.value) // 1000000
+        month = (int(self.value) // 10000) % 100
+        day = (int(self.value) // 100) % 100
         block = (int(self.value) ) % 10
-        return unicode('{0}.{1}.{2} {3} блок'.format(year, month, day, block), 'utf-8')
+        if (int(self.value)//10) % 10 == SEM_IND:
+            return unicode('{0}.{1}.{2}, {3} блок семинаров'.format(year, month, day, block), 'utf-8')
+        return unicode('{0}.{1}.{2}, {3} блок факультативов'.format(year, month, day, block), 'utf-8')

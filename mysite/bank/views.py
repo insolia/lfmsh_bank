@@ -72,8 +72,8 @@ def show_my_trans(request):
 
     if user_group_name == 'pioner':
 
-        in_trans = Transaction.objects.filter(recipient=request.user).exclude(type__group1='attend').order_by('-creation_date')
-        attends = Transaction.objects.filter(recipient=request.user).filter(type__group1='attend').order_by('-creation_date')
+        in_trans = Transaction.objects.filter(recipient=request.user).exclude(type__group1='attend').filter(counted=True).order_by('-creation_date')
+        attends = Transaction.objects.filter(recipient=request.user).filter(type__group1='attend').filter(counted=True).order_by('-creation_date')
         return render(request, 'bank/transaction_lists/my_trans_list_pioner.html',
                       {'in_trans': in_trans, 'out_trans': out_trans, 'attends': attends})
     else:
@@ -356,7 +356,7 @@ def add_sem(request):
             type = TransactionType.objects.get(name='sem')
             status = TransactionStatus.objects.get(name='PR')
 
-            att_val = 100000 * (int(form.cleaned_data['date'].year) % 100) + 1000 * (int(form.cleaned_data['date'].month)) + 10 * (int(form.cleaned_data['date'].day)) + int(request.POST['block'])
+            att_val = 1000000 * (int(form.cleaned_data['date'].year) % 100) + 10000 * (int(form.cleaned_data['date'].month)) + 100 * (int(form.cleaned_data['date'].day)) + int(request.POST['block'])
             print att_val
             att_type = TransactionType.objects.get(name='sem_attend')
 
@@ -414,7 +414,7 @@ def add_fac_att(request):
             creator = request.user
             status = TransactionStatus.objects.get(name='PR')
 
-            att_val = 100000 * (int(form.cleaned_data['date'].year) % 100) + 1000 * (int(form.cleaned_data['date'].month)) + 10 * (int(form.cleaned_data['date'].day)) + int(request.POST['block'])
+            att_val = 1000000 * (int(form.cleaned_data['date'].year) % 100) + 10000 * (int(form.cleaned_data['date'].month)) + 100 * (int(form.cleaned_data['date'].day)) + int(request.POST['block']) + 10
             att_type = TransactionType.objects.get(name='fac_attend')
 
             attends = []
