@@ -253,6 +253,8 @@ class Transaction(models.Model):
         day = (int(self.value) // 100) % 100
         block = (int(self.value) ) % 10
         if (int(self.value)//10) % 10 == SEM_IND:
+            if (int(self.value)) % 10 == 0:
+                return unicode('Лекция', 'utf-8')
             return unicode('{0}.{1}.{2}, {3} блок семинаров'.format(year, month, day, block), 'utf-8')
         return unicode('{0}.{1}.{2}, {3} блок факультативов'.format(year, month, day, block), 'utf-8')
 

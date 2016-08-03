@@ -5,7 +5,7 @@
 
 <h2>Здравствуйте, {{request.user.account.long_name}} </h2>
 <br>
-<h3> Ваш баланс: {{request.user.account.balance}} @</h3>
+<h3> Ваш баланс: {{request.user.account.get_balance}} @</h3>
 
 <br>
 
@@ -41,7 +41,7 @@
         <td>{{t.get_creation_date}}</td>
 
         <td>{% if t.value > 0 %}+{% endif %}
-            {{t.value}}@
+            {{t.get_value}}@
         </td>
         <td>{{t.creator.account}}</td>
         <td>{{t.type}}</td>

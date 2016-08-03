@@ -118,8 +118,9 @@
             </div>
 
 
-      <h5>Пропущено лекций: {{request.user.account.lec_missed}}</h5>
+
       {% if request.user.account.lec_missed != 0 %}
+      <h5>Пропущено лекций: {{request.user.account.lec_missed}}</h5>
       <h5>Штраф за следующую пропущенную лекцию: {{lec_pen}}@</h5>
         {% endif %}
   </div>

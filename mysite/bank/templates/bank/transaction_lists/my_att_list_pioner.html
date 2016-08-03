@@ -5,7 +5,7 @@
 
 <h2>Здравствуйте, {{request.user.account.long_name}} </h2>
 <br>
-<h4> Ваш баланс: {{request.user.account.balance}} @</h4>
+<!---h4> Ваш баланс: {{request.user.account.get_balance}} @</h4--->
 <h4> Зачтенных посещений: {{request.user.account.sem_fac_attend}}  <small>А надо бы {{request.user.account.sem_att_needed}}</small></h4>
 
 <br>

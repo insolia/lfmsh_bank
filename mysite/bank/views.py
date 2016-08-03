@@ -16,6 +16,7 @@ from .tables import *
 from django.utils import timezone
 import helper_functions as hf
 from constants import *
+import time
 
 
 
@@ -242,21 +243,31 @@ def add_zaryadka(request, meta_link_pk=None):
 @permission_required('bank.add_transaction', login_url='bank:index')
 def add_lec(request):
     if request.method == "POST":
+        print request.POST
 
         lec_missers = []
+        description = request.POST['description']
+        creator = request.user
+        type = TransactionType.objects.get(name='fine_lec')
+        att_type = TransactionType.objects.get(name='lec_attend')
 
+        status = TransactionStatus.objects.get(name='PR')
+        att_val = 10311100
+        attends = []
         for u in User.objects.filter(groups__name='pioner'):
-            if u.username + '_check' not in request.POST:
+            if u.username not in request.POST:
                 lec_missers.append(u)
+            else:
+                a = Transaction.create_trans(recipient=u, value=att_val, creator=creator, description=description, type=att_type,status=status)
+                attends.append(a)
+                print u.username
+
+
+
 
         if not lec_missers:
             return redirect(reverse('bank:index'))
 
-        description = request.POST['description']
-        creator = request.user
-        type = TransactionType.objects.get(name='fine_lec')
-
-        status = TransactionStatus.objects.get(name='PR')
 
         new_transactions = []
         for u in lec_missers:
@@ -265,7 +276,7 @@ def add_lec(request):
                                                  type=type, status=status)
             new_transactions.append(new_trans)
 
-        return render(request, 'bank/add_trans/trans_add_ok.html', {'transactions': new_transactions})
+        return render(request, 'bank/add_trans/trans_add_ok.html', {'transactions': new_transactions, 'attends': attends})
 
 
 
@@ -403,7 +414,7 @@ def add_sem(request):
                                                  type=type, status=status)
             attends = []
             for u in User.objects.filter(groups__name='pioner'):
-                if u.username + '_check' in request.POST and request.POST[u.username + '_check']:
+                if u.username  in request.POST and request.POST[u.username]:
                     a = Transaction.create_trans(recipient=u, value=att_val, creator=creator,
                                                  description=description,
                                                  type=att_type, status=status)
@@ -456,10 +467,11 @@ def add_fac_att(request):
 
             attends = []
             for u in User.objects.filter(groups__name='pioner'):
-                if u.username + '_check' in request.POST and request.POST[u.username + '_check']:
+                if u.username  in request.POST and request.POST[u.username]:
                     a = Transaction.create_trans(recipient=u, value=att_val, creator=creator,
                                                  description=description,
                                                  type=att_type, status=status)
+                    print u.username + 'check'
                     attends.append(a)
 
             return render(request, 'bank/add_trans/trans_add_ok.html', {'attends': attends})
@@ -645,6 +657,7 @@ def trans_red(request, trans_id):
         return redirect(reverse('bank:index'))
     dec_trans_ok(request, trans_id) #delete what we have
     print trans_id
+    # reverse to specific form
     return redirect(reverse('bank:add_zaryadka', kwargs={'meta_link_pk': int(trans_id)}))
 
 
