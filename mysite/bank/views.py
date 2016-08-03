@@ -68,31 +68,36 @@ def all_ped_accounts(request):
 def show_my_trans(request):
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
 
-    out_trans = Transaction.objects.filter(creator=request.user).exclude(type__group1='attend').order_by('-creation_date')
+    out_trans = Transaction.objects.filter(creator=request.user).exclude(type__group1='attend').order_by(
+        '-creation_date')
 
     if user_group_name == 'pioner':
 
-        in_trans = Transaction.objects.filter(recipient=request.user).exclude(type__group1='attend').filter(counted=True).order_by('-creation_date')
-        attends = Transaction.objects.filter(recipient=request.user).filter(type__group1='attend').filter(counted=True).order_by('-creation_date')
+        in_trans = Transaction.objects.filter(recipient=request.user).exclude(type__group1='attend').filter(
+            counted=True).order_by('-creation_date')
+
         return render(request, 'bank/transaction_lists/my_trans_list_pioner.html',
-                      {'in_trans': in_trans, 'out_trans': out_trans, 'attends': attends})
+                      {'in_trans': in_trans, 'out_trans': out_trans})
     else:
+        out_trans = out_trans.filter(meta=None)
         return render(request, 'bank/transaction_lists/my_trans_list_ped.html',
                       {'out_trans': out_trans})
+
 
 @login_required
 def show_my_att(request):
     user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
 
-
     if user_group_name == 'pioner':
 
-        attends = Transaction.objects.filter(recipient=request.user).filter(type__group1='attend').filter(counted=True).order_by('-creation_date')
+        attends = Transaction.objects.filter(recipient=request.user).filter(type__group1='attend').filter(
+            counted=True).order_by('-creation_date')
         return render(request, 'bank/transaction_lists/my_att_list_pioner.html',
                       {'attends': attends})
 
     else:
-        attends = Transaction.objects.filter(creator=request.user).filter(type__group1='attend').filter(counted=True).order_by('-creation_date')
+        attends = Transaction.objects.filter(creator=request.user).filter(type__group1='attend').filter(
+            counted=True).order_by('-creation_date')
 
         return render(request, 'bank/transaction_lists/my_att_list_ped.html',
                       {'attends': attends})
@@ -176,20 +181,19 @@ def add_mass_special(request):
 
 
 @permission_required('bank.add_transaction', login_url='bank:index')
-def add_zaryadka(request):
+def add_zaryadka(request, meta_link_pk=None):
     if request.method == "POST":
 
         zar_attendants = []
 
         for u in User.objects.filter(groups__name='pioner'):
-            if u.username + '_check' in request.POST:
+            if u.username in request.POST:
                 zar_attendants.append(u)
 
         if not zar_attendants:
             return redirect(reverse('bank:index'))
 
         value = hf.zaryadka(len(zar_attendants))
-        print value
         description = request.POST['description']
         creator = request.user
         type = TransactionType.objects.get(name='zaryadka')
@@ -197,10 +201,17 @@ def add_zaryadka(request):
         status = TransactionStatus.objects.get(name='PR')
 
         new_transactions = []
+        meta_link = Transaction.create_trans(recipient=None, value=ZARYADKA_BUDGET, creator=creator, description=description,
+                                             type=type, status=status)
+        meta_link.save()
+        meta = MetaTransaction(meta=meta_link, creation_dict = dict(request.POST).__repr__())
+        meta.save()
+
         for u in zar_attendants:
             new_trans = Transaction.create_trans(recipient=u, value=value, creator=creator, description=description,
                                                  type=type, status=status)
             new_transactions.append(new_trans)
+            meta.transactions.add(new_trans)
 
         if new_transactions:
             return render(request, 'bank/add_trans/trans_add_ok.html', {'transactions': new_transactions})
@@ -208,7 +219,8 @@ def add_zaryadka(request):
         else:
             users = User.objects.filter(groups__name='pioner')
             return render(request, 'bank/add_trans/trans_add_zaryadka.html', {'users': users})
-    else:
+    else:  # request method get
+           # render table with info from metatrans (pk = meta_pk).creation_dict
 
         table = []
         for i in xrange(4):
@@ -217,7 +229,14 @@ def add_zaryadka(request):
             RequestConfig(request).configure(table[i])
             table[i].paginate(per_page=1000)
 
-        return render(request, 'bank/add_trans/trans_add_zaryadka.html', {'table': table})
+        if meta_link_pk:
+            meta_link = Transaction.objects.get(pk = meta_link_pk)
+            creation_dict = eval(MetaTransaction.objects.get(meta=meta_link).creation_dict)
+
+        else:
+            creation_dict = {}
+        print creation_dict
+        return render(request, 'bank/add_trans/trans_add_zaryadka.html', {'table': table,'creation_dict': creation_dict})
 
 
 @permission_required('bank.add_transaction', login_url='bank:index')
@@ -364,7 +383,7 @@ def add_sem(request):
 
             score = 0
             for i in xrange(9):
-                score += int(request.POST['m'+str(i+1)])
+                score += int(request.POST['m' + str(i + 1)])
 
             value = hf.seminar(score)
             recipient = form.cleaned_data['recipient'].user
@@ -373,7 +392,9 @@ def add_sem(request):
             type = TransactionType.objects.get(name='sem')
             status = TransactionStatus.objects.get(name='PR')
 
-            att_val = 1000000 * (int(form.cleaned_data['date'].year) % 100) + 10000 * (int(form.cleaned_data['date'].month)) + 100 * (int(form.cleaned_data['date'].day)) + int(request.POST['block'])
+            att_val = 1000000 * (int(form.cleaned_data['date'].year) % 100) + 10000 * (
+            int(form.cleaned_data['date'].month)) + 100 * (int(form.cleaned_data['date'].day)) + int(
+                request.POST['block'])
             print att_val
             att_type = TransactionType.objects.get(name='sem_attend')
 
@@ -390,10 +411,8 @@ def add_sem(request):
                     if a.counted:
                         attends.append(a)
 
-
-
-
-            return render(request, 'bank/add_trans/trans_add_ok.html', {'transactions': [new_trans], 'attends': attends})
+            return render(request, 'bank/add_trans/trans_add_ok.html',
+                          {'transactions': [new_trans], 'attends': attends})
         else:
             table = []
         for i in xrange(4):
@@ -419,7 +438,6 @@ def add_sem(request):
                       {'form': form, 'table_html': 'bank/add_trans/otr_tables/check_table.html', 'table': table})
 
 
-
 @permission_required('bank.add_transaction', login_url='bank:index')
 def add_fac_att(request):
     if request.method == "POST":
@@ -431,7 +449,9 @@ def add_fac_att(request):
             creator = request.user
             status = TransactionStatus.objects.get(name='PR')
 
-            att_val = 1000000 * (int(form.cleaned_data['date'].year) % 100) + 10000 * (int(form.cleaned_data['date'].month)) + 100 * (int(form.cleaned_data['date'].day)) + int(request.POST['block']) + 10
+            att_val = 1000000 * (int(form.cleaned_data['date'].year) % 100) + 10000 * (
+            int(form.cleaned_data['date'].month)) + 100 * (int(form.cleaned_data['date'].day)) + int(
+                request.POST['block']) + 10
             att_type = TransactionType.objects.get(name='fac_attend')
 
             attends = []
@@ -441,9 +461,6 @@ def add_fac_att(request):
                                                  description=description,
                                                  type=att_type, status=status)
                     attends.append(a)
-
-
-
 
             return render(request, 'bank/add_trans/trans_add_ok.html', {'attends': attends})
         else:
@@ -534,7 +551,7 @@ def add_p2p(request):
 
         form = P2PTransForm(int(request.user.account.balance - hf.p2p_buf), request.POST)
         # form.fields['value'].max_value = int((request.user.account.balance * hf.p2p_proc))
-        #print form.fields['value']
+        # print form.fields['value']
 
 
         if form.is_valid():
@@ -568,10 +585,14 @@ def dec_trans(request, trans_id):
     print 'decline page'
 
     trans = Transaction.objects.get(pk=trans_id)
+    if not trans.recipient:
+        to_del = trans.meta_link.all()[0].transactions.all()
+    else:
+        to_del = [trans]
     if trans.creator != request.user and not request.user.has_perm('del_foreign_trans'):
         return redirect(reverse('bank:index'))
 
-    return render(request, 'bank/dec_trans/trans_dec_confirm.html', {'t': trans})
+    return render(request, 'bank/dec_trans/trans_dec_confirm.html', {'trans': to_del, 'meta': trans_id})
 
 
 @login_required
@@ -580,27 +601,51 @@ def dec_trans_ok(request, trans_id):
     trans = Transaction.objects.get(pk=trans_id)
     if trans.creator != request.user and not request.user.has_perm('del_foreign_trans'):
         return redirect(reverse('bank:index'))
+    if not trans.recipient:
+        to_del = trans.meta_link.all()[0].transactions.all()
+    else:
+        to_del = [trans]
+    if request.user.has_perm('del_foreign_trans') and to_del[0].creator != request.user:
 
-    if request.method == "POST":
+        st = TransactionStatus.objects.get(name='DA')
+
+    else:
+        st = TransactionStatus.objects.get(name='DC')
+    for t in to_del:
 
         print'decline of trans happening'
-        trans.cancel()
+        t.cancel()
+        t.status = st
+        t.save()
 
-        if request.user.has_perm('del_foreign_trans') and trans.creator != request.user:
-
-            trans.status = TransactionStatus.objects.get(name='DA')
-
-        else:
-            trans.status = TransactionStatus.objects.get(name='DC')
-
+        trans.status = st
         trans.save()
 
 
 
-    else:
-        return redirect(reverse('bank:index'))
 
-    return render(request, 'bank/dec_trans/trans_dec_ok.html', {'transactions': [trans]})
+
+
+    return render(request, 'bank/dec_trans/trans_dec_ok.html', {'transactions': to_del})
+
+
+@permission_required('bank.view_pio_trans_list', login_url='bank:index')
+def meta_list(request, trans_id):
+    trans = Transaction.objects.get(pk=trans_id)
+    if trans.creator != request.user and not request.user.has_perm('del_foreign_trans'):
+        return redirect(reverse('bank:index'))
+    transactions = trans.meta_link.all()[0].transactions.all()
+    print transactions
+    return render(request, 'bank/transaction_lists/my_trans_list_ped.html', {'out_trans': transactions})
+
+@permission_required('bank.add_transaction', login_url='bank:index')
+def trans_red(request, trans_id):
+    trans = Transaction.objects.get(pk=trans_id)
+    if trans.creator != request.user and not request.user.has_perm('del_foreign_trans'):
+        return redirect(reverse('bank:index'))
+    dec_trans_ok(request, trans_id) #delete what we have
+    print trans_id
+    return redirect(reverse('bank:add_zaryadka', kwargs={'meta_pk': int(trans_id)}))
 
 
 @permission_required('bank.view_pio_trans_list', login_url='bank:index')

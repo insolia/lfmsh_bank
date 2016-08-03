@@ -108,7 +108,7 @@ class TransactionStatus(models.Model):
 class Transaction(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
 
-    recipient = models.ForeignKey(User, related_name='received_trans', on_delete=models.CASCADE)
+    recipient = models.ForeignKey(User, related_name='received_trans', on_delete=models.CASCADE,null=True)
     creator = models.ForeignKey(User, related_name='created_trans', on_delete=models.CASCADE)
 
     description = models.TextField(max_length=400, blank=True)
@@ -124,7 +124,7 @@ class Transaction(models.Model):
 
 
     def __unicode__(self):
-        return self.recipient.username + " " + str(self.value)
+        return self.creator.username + " " + str(self.value)
 
     @classmethod
     def create_trans(cls, recipient, value, creator, description, type, status):
@@ -133,10 +133,11 @@ class Transaction(models.Model):
         if type.group1 == 'fine':
             value = - value
 
+
         new_trans = cls(recipient=recipient, value=value, creator=creator, description=description,
                         type=type, status=status)
 
-        if status.name == 'PR':
+        if status.name == 'PR' and recipient != None:
             a = new_trans.count()
             if a:
                 new_trans.do_counters(1)
@@ -249,9 +250,7 @@ class Transaction(models.Model):
             return unicode('{0}.{1}.{2}, {3} блок семинаров'.format(year, month, day, block), 'utf-8')
         return unicode('{0}.{1}.{2}, {3} блок факультативов'.format(year, month, day, block), 'utf-8')
 
-'''
 class MetaTransaction(models.Model):
-    transactions = models.ManyToOneRel()
-    type = models.ForeignKey(TransactionType)
-    creator = models.ForeignKey(User, related_name='created_metatrans', on_delete=models.CASCADE)
-    creation_dict '''
+    transactions = models.ManyToManyField(Transaction, default=None,blank=True, related_name='meta')
+    creation_dict = models.CharField(max_length=20000)
+    meta = models.ForeignKey(Transaction, null=True, related_name='meta_link')

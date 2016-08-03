@@ -1,7 +1,7 @@
 # coding=utf-8
 __author__ = 'Insolia'
 
-zaryadka_budget = 40.
+ZARYADKA_BUDGET = 40.
 p2p_buf = 40.
 p2p_proc = 0.7
 daily_tax = -20

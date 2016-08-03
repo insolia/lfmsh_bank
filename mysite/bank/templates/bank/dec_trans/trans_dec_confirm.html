@@ -19,6 +19,7 @@
 
 
     </tr>
+    {% for t in trans %}
     <tr>
         <td>{{t.creation_date}}</td>
         <td>{{t.type}}</td>
@@ -35,11 +36,12 @@
         <td>{{t.description}}</td>
 
     </tr>
+    {% endfor %}
 </table>
 <form>
     {% csrf_token %}
-    <button type="submit" class="btn btn-info" formaction="{% url 'bank:trans_dec_ok' t.pk %} " formmethod="POST">
-        Отменить транзакцию
+    <button type="submit" class="btn btn-info" formaction="{% url 'bank:trans_dec_ok' meta %} " formmethod="POST">
+        Отменить транзакции
     </button>
 </form>
 

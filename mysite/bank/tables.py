@@ -41,7 +41,7 @@ class ZarTable(tables.Table):
         attrs = {'class': 'paleblue table table-striped'}
     name = tables.Column(accessor='account.long_name', verbose_name=unicode('Пионер','utf-8'), order_by='last_name')
 
-    check = tables.TemplateColumn('<input type="checkbox" name="{{record.username}}_check" value="0">',verbose_name=unicode('Посетил','utf-8'))
+    check = tables.TemplateColumn('<input type="checkbox" name="{{record.username}}" value="0"  {% if record.username  in creation_dict%} checked {% endif %}>',verbose_name=unicode('Посетил','utf-8'))
 
 class LecTable(tables.Table):
     class Meta:
