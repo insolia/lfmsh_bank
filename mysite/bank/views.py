@@ -645,7 +645,7 @@ def trans_red(request, trans_id):
         return redirect(reverse('bank:index'))
     dec_trans_ok(request, trans_id) #delete what we have
     print trans_id
-    return redirect(reverse('bank:add_zaryadka', kwargs={'meta_pk': int(trans_id)}))
+    return redirect(reverse('bank:add_zaryadka', kwargs={'meta_link_pk': int(trans_id)}))
 
 
 @permission_required('bank.view_pio_trans_list', login_url='bank:index')

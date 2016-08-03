@@ -36,7 +36,7 @@ urlpatterns = patterns('',
                        url(r'^dec_trans/(?P<trans_id>[0-9]+)/$', views.dec_trans, name='trans_dec'),
                        url(r'^dec_trans_ok/(?P<trans_id>[0-9]+)/$', views.dec_trans_ok, name='trans_dec_ok'),
 
-                       url(r'^trans_list/(?P<trans_id>.+)/$', views.trans_list, name='trans_list'),
+                       url(r'^trans_list/(?P<username>.+)/$', views.trans_list, name='trans_list'),
                        url(r'^meta_list/(?P<trans_id>.+)/$', views.meta_list, name='meta_list'),
 
                        url(r'^trans_red/(?P<trans_id>.+)/$', views.trans_red, name='trans_red'),

@@ -231,7 +231,13 @@ class Transaction(models.Model):
             return False
         if self.type.name == 'p2p' and self.status.name == 'PR':
             return False
+        print self.meta.all()
+        print len(self.meta.all())
+        if len(self.meta.all()) != 0:
+            return False
+
         return True
+
 
     def get_creation_date(self):
         return self.creation_date.strftime("%d.%m.%Y %H:%M")
@@ -251,6 +257,8 @@ class Transaction(models.Model):
         return unicode('{0}.{1}.{2}, {3} блок факультативов'.format(year, month, day, block), 'utf-8')
 
 class MetaTransaction(models.Model):
-    transactions = models.ManyToManyField(Transaction, default=None,blank=True, related_name='meta')
     creation_dict = models.CharField(max_length=20000)
+
+
+    transactions = models.ManyToManyField(Transaction, default=None, blank=True, related_name='meta')
     meta = models.ForeignKey(Transaction, null=True, related_name='meta_link')
