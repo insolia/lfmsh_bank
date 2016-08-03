@@ -26,27 +26,32 @@
 {% if 'bank.view_pio_trans_list' in request.user.get_all_permissions %}
 <br>
 <a href="{% url 'bank:all_acc' %}" class="btn btn-primary  " role="button"> Посмотреть список пионеров с балансом</a>
-<br>
+<br><br>
+
 {%endif%}
 
 
 {% if 'bank.view_ped_trans_list' in request.user.get_all_permissions %}
-<a href="{% url 'bank:all_acc_ped' %}" > Посмотреть список педсостава</a>
-<br>
+<a href="{% url 'bank:all_acc_ped'  %} " class="btn btn-primary  " role="button"> Посмотреть список педсостава</a>
+<br><br>
+
 {%endif%}
 
 {% if 'bank.manage_trans' in request.user.get_all_permissions %}
-<a href="{% url 'bank:manage_p2p' %}"> Разобрать пионерские личные транзакции</a> ({{ unm_len }})
-<br>
+<a href="{% url 'bank:manage_p2p' %}"class="btn btn-primary  " role="button"> Разобрать пионерские личные транзакции  <span class="badge">{{ unm_len }}</span></a>
+<br><br>
+
 {%endif%}
 
 {% if 'bank.see_super_table' in request.user.get_all_permissions %}
-<a href="{% url 'bank:super_table' %}"> Посмотреть супер таблицу</a>
-<br>
+<a href="{% url 'bank:super_table' %}"class="btn btn-primary  " role="button"> Посмотреть супер таблицу</a>
+<br><br>
+
 {%endif%}
 
 {% if 'bank.add_transaction' in request.user.get_all_permissions %}
-<br>
+<br><br>
+
 
 <p>Добавить транзакции</p>
 

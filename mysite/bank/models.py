@@ -248,3 +248,10 @@ class Transaction(models.Model):
         if (int(self.value)//10) % 10 == SEM_IND:
             return unicode('{0}.{1}.{2}, {3} блок семинаров'.format(year, month, day, block), 'utf-8')
         return unicode('{0}.{1}.{2}, {3} блок факультативов'.format(year, month, day, block), 'utf-8')
+
+'''
+class MetaTransaction(models.Model):
+    transactions = models.ManyToOneRel()
+    type = models.ForeignKey(TransactionType)
+    creator = models.ForeignKey(User, related_name='created_metatrans', on_delete=models.CASCADE)
+    creation_dict '''

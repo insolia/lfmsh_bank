@@ -12,6 +12,8 @@ urlpatterns = patterns('',
 
 
                        url(r'^my_trans/$', views.show_my_trans, name='my_trans'),
+                       url(r'^my_att/$', views.show_my_att, name='my_att'),
+
                        url(r'^all_acc$', views.all_pioner_accounts, name='all_acc'),
                        url(r'^all_acc_ped$', views.all_ped_accounts, name='all_acc_ped'),
 

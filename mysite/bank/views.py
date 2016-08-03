@@ -80,6 +80,23 @@ def show_my_trans(request):
         return render(request, 'bank/transaction_lists/my_trans_list_ped.html',
                       {'out_trans': out_trans})
 
+@login_required
+def show_my_att(request):
+    user_group_name = request.user.groups.filter(name__in=['pioner', 'pedsostav', 'admin'])[0].name
+
+
+    if user_group_name == 'pioner':
+
+        attends = Transaction.objects.filter(recipient=request.user).filter(type__group1='attend').filter(counted=True).order_by('-creation_date')
+        return render(request, 'bank/transaction_lists/my_att_list_pioner.html',
+                      {'attends': attends})
+
+    else:
+        attends = Transaction.objects.filter(creator=request.user).filter(type__group1='attend').filter(counted=True).order_by('-creation_date')
+
+        return render(request, 'bank/transaction_lists/my_att_list_ped.html',
+                      {'attends': attends})
+
 
 @permission_required('bank.add_transaction', login_url='bank:index')
 def add_special(request):

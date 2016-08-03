@@ -6,10 +6,19 @@ from transliterate import translit
 from django.contrib.auth.models import Group
 import random
 from bank.constants import *
+import string
 
 
 def get_pd(str):
-    return '111'
+    '''
+    a = random.sample(string.printable[:62], 12)
+    s = ''
+    for c in a:
+        s = s+c
+    return s
+    '''
+
+
 
 ### execfile('add_pioners_script.py')
 

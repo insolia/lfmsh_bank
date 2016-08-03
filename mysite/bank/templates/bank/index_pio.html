@@ -33,13 +33,21 @@
 
 
 <div class="row">
-    <div class="col-sm-6 ">
+    <div class="col-sm-4 ">
 
 <a href="{% url 'bank:my_trans' %}" class="btn btn-primary  btn-block " role="button"> Мои транзакции</a>
 <br>
 <br>
         </div>
-    <div class="col-sm-6 ">
+
+
+    <div class="col-sm-4 ">
+
+<a href="{% url 'bank:my_att' %}" class="btn btn-primary  btn-block " role="button"> Мои посещения</a>
+<br>
+<br>
+        </div>
+    <div class="col-sm-4 ">
 
 {% if user.account.balance > 40 %}
 <a href="{% url 'bank:add_p2p' %}" class="btn btn-primary  btn-block" role="button"> Личный перевод</a>
