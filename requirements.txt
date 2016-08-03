@@ -1,4 +1,5 @@
 django-autocomplete-light
 django-bootstrap3
 django-tables2
+transliterate
 

@@ -10,19 +10,19 @@ import string
 
 
 def get_pd(str):
-    '''
+
     a = random.sample(string.printable[:62], 12)
     s = ''
     for c in a:
         s = s+c
     return s
-    '''
+
 
 
 
 ### execfile('add_pioners_script.py')
 
-p_f = open('meta_files/pioners2.csv')
+p_f = open('meta_files/pio_table_2.csv')
 p_out = open('meta_files/logins.txt', 'w')
 
 g = Group.objects.get(name='pioner')
@@ -32,8 +32,8 @@ for p in csv.reader(p_f):
     fn = p[1].decode('utf-8')
     tn = p[2].decode('utf-8')
 
-    grad = p[3].decode('utf-8')
-    otr = random.randint(1, 4)
+    grad = p[4].decode('utf-8')
+    otr =  p[3].decode('utf-8')
 
     login = translit(fn[0], 'ru', reversed=True) + translit(tn[0], 'ru', reversed=True) + translit(ln, 'ru',
                                                                                                    reversed=True)
