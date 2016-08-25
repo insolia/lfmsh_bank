@@ -28,6 +28,15 @@ class Account(models.Model):
     sem_read = models.IntegerField(blank=True, default=0)
 
 
+    def get_penalty(self):
+        p = 0
+        p += max(0, (self.lab_needed() - int(self.lab_passed))) * LAB_PENALTY #labs
+        p += hf.sem_fac_penalty(max(0, (hf.sem_needed - int(self.sem_fac_attend)))) #semfac attend
+        p += SEM_NOT_READ_PEN * max(0, 1 - int(self.sem_read))
+        return p
+
+
+
     def __unicode__(self):
         if self.user.first_name:
 
@@ -130,7 +139,7 @@ class Transaction(models.Model):
     def create_trans(cls, recipient, value, creator, description, type, status):
 
 
-        if type.group1 == 'fine':
+        if type.group1 == 'fine' or type.group1 == 'payment':
             value = - value
 
 
@@ -177,7 +186,7 @@ class Transaction(models.Model):
             a.fac_passed += value
             a.save()
 
-        if self.type.group1 == 'attend':
+        if self.type.group1 == 'attend' and self.type.name != 'lec_attend':
             a = self.recipient.account
             a.sem_fac_attend += value
             a.save()

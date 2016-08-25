@@ -5,8 +5,8 @@
 
 {# Load CSS and JavaScript #}
 
-{% bootstrap_javascript jquery=1 %}
-{% bootstrap_css %}
+<!--{% bootstrap_javascript jquery=1 %}
+{% bootstrap_css %}-->
 
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
@@ -21,18 +21,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="http://crest.my/v2/wp-content/uploads/2015/10/email.png">
+    <!---link rel="icon" href="http://crest.my/v2/wp-content/uploads/2015/10/email.png"--->
     <link rel="stylesheet" href={% static "django_tables2/themes/paleblue/css/screen.css"%} />
     <link rel="stylesheet" href={% static "bank/style.css"%} />
 
+        <link rel="stylesheet" href={% static "bank/css/bootstrap.min.css"%}>
+        <!---link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+              integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"--->
+
 
     <title>Банк ЛФМШ</title>
-    <!---
-        <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-              integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    --->
+
 
 </head>
 
@@ -59,6 +59,7 @@
                 {% if user.is_authenticated %}
                 <li><a href="{% url 'bank:index' %}">Домой</a></li>
                 <li><a href="{% url 'bank:my_trans' %}">Мои транзакции</a></li>
+<li><a href="{% url 'bank:media'%}">Файловый архив</a></li>
                 <!----{% if user.account.can_add_trans %}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -96,12 +97,13 @@
 
 <!---script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>--->
+<script src={% static "bank/jquery/jquery-3.1.0.min.js" %}></script>
+<script src={% static "bank/js/bootstrap.min.js" %}></script>
 
 
-<script src="{% static 'bank/js/bootstrap.min.js' %}"></script>
+<!--div id="fix-for-navbar-fixed-top-spacing" style="height: 42px;">&nbsp;</div> -->
 
-<!---<div id="fix-for-navbar-fixed-top-spacing" style="height: 42px;">&nbsp;</div> --->
 
 <div class="container-fluid main">
     <div class="row">

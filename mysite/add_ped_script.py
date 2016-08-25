@@ -11,7 +11,7 @@ import string
 
 def get_pd(str):
 
-    a = random.sample(string.printable[:62], 8)
+    a = random.sample(string.printable[:62], 12)
     s = ''
     for c in a:
         s = s+c
@@ -20,24 +20,24 @@ def get_pd(str):
 
 
 
-### execfile('add_pioners_script.py')
+### execfile('add_ped_script.py')
 
-p_f = open('meta_files/pio_table_2.csv')
-p_out = open('meta_files/logins_pio.txt', 'w')
+p_f = open('meta_files/ped_table_1.csv')
+p_out = open('meta_files/logins_ped.txt', 'w')
 
-g = Group.objects.get(name='pioner')
+g = Group.objects.get(name='pedsostav')
 
 for p in csv.reader(p_f):
     ln = p[0].decode('utf-8')
     fn = p[1].decode('utf-8')
     tn = p[2].decode('utf-8')
+    grad = 13
+    otr = 5
 
-    grad = p[4].decode('utf-8')
-    otr =  p[3].decode('utf-8')
 
     login = translit(fn[0], 'ru', reversed=True) + translit(tn[0], 'ru', reversed=True) + translit(ln, 'ru',
                                                                                                    reversed=True)
-    login = login.lower().replace("'","")
+    login = login.lower().replace("'", "")
     pd = get_pd(login)
 
     new_u = User.objects.create_user(first_name=fn, last_name=ln, username=login, password=pd)
@@ -46,9 +46,7 @@ for p in csv.reader(p_f):
     new_a = Account(user=new_u, third_name=tn, grade=grad, otr=otr)
     new_a.save()
 
-    initial = Transaction.create_trans(recipient=new_u, creator=User.objects.get(username='admin'), value=INITIAL_MONEY,
-                                       description=INITIAL_MONEY_DESC, type=TransactionType.objects.get(name='initial'),
-                                       status=TransactionStatus.objects.get(name="PR"))
+
     print ln + ' ' + fn + '\n' + 'login: ' + login + ' password: ' + pd
     info = ln + ' ' + fn + '\n' + 'login: ' + login + ' password: ' + pd
 

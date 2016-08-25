@@ -1,0 +1,300 @@
+Зенькович Александр
+login: adzen'kovich password: V7z16O94
+
+Зубков Виктор
+login: vizubkov password: QdlhrOtu
+
+Иванцова Виолетта
+login: vsivantsova password: 1oA7V2Y3
+
+Розенталь Сусанна
+login: srrozental' password: BO47lupS
+
+Сенников Андрей
+login: aosennikov password: KprCMEvA
+
+Абрамов Семён
+login: ssabramov password: xu3QY1jZ
+
+Балашов Павел
+login: pobalashov password: ED8TLYbR
+
+Белоусов Михаил
+login: mabelousov password: 4PWIfGRl
+
+Белоусова Алина
+login: asbelousova password: UPybazQW
+
+Галкина Полина
+login: psgalkina password: 5SdT1sqb
+
+Дмитричева Анастасия
+login: aadmitricheva password: kePx5ItC
+
+Домбек Евгений
+login: emdombek password: d2vOsPof
+
+Загурский Илья
+login: ipzagurskij password: HAPiVSFd
+
+Иваник Данил
+login: diivanik password: Uz3n1GYt
+
+Колесов Павел
+login: pakolesov password: x7b2csHz
+
+Круглов Дмитрий
+login: dakruglov password: rkWAYyF8
+
+Куратова Дарья
+login: dakuratova password: Ke0L6FEm
+
+Лабутина Ксения
+login: kslabutina password: UX2tcA1W
+
+Лазарев Даниил
+login: dvlazarev password: h2WR1T7v
+
+Масленников Фёдор
+login: famaslennikov password: Rc7ZHgd8
+
+Маслов Евгений
+login: emmaslov password: Yej1IiSq
+
+Мухин Фёдор
+login: famuhin password: HSdA0om4
+
+Мущина Анастасия
+login: asmuschina password: 7MxQmeJu
+
+Попов Михаил
+login: mipopov password: JmC0LcDS
+
+Птушко София
+login: ssptushko password: kq2mSoW8
+
+Рябинина Полина
+login: pvrjabinina password: ZhSMexUC
+
+Савельева Анастасия
+login: ajusavel'eva password: NkImgx60
+
+Сумин Кирилл
+login: kasumin password: YUqB0zgO
+
+Трофимов Арсений
+login: adtrofimov password: FA4iBOYm
+
+Уланова Ирина
+login: isulanova password: SefXDCAm
+
+Хазанов Борис
+login: behazanov password: oOCGgLhF
+
+Черемхина Татьяна
+login: tacheremhina password: hrDY4Swn
+
+Шилова Ксения
+login: kashilova password: fJn1lq8E
+
+Яушева Полина
+login: pajausheva password: zXkmpL9A
+
+Клевцов Никита
+login: nmklevtsov password: Ju7GbV8q
+
+Баранов Егор
+login: eabaranov password: vWa6zjFo
+
+Бурдонов Глеб
+login: gfburdonov password: ZmhLles9
+
+Веселова Полина
+login: paveselova password: Nx8QmVlO
+
+Глявина Анна
+login: amgljavina password: uV6NYzhv
+
+Гордеева Валерия
+login: vmgordeeva password: BgUDLTe1
+
+Ефимкина Елизавета
+login: eiefimkina password: tA2YU7ib
+
+Ефремова Виктория
+login: vaefremova password: l5OfbRiC
+
+Заболотнов Семён
+login: svzabolotnov password: M9mtA3k8
+
+Зарков Максим
+login: mrzarkov password: aLT3UBWH
+
+Зубкова Александра
+login: aizubkova password: OdKL4JUy
+
+Иванов Олег
+login: ovivanov password: 5jMiskUN
+
+Изотова Анастасия
+login: aaizotova password: L3m5SMHt
+
+Кирсанова Дарья
+login: dakirsanova password: prmHdfS2
+
+Крылова Мария
+login: mikrylova password: RQHdvkFX
+
+Лобашев Егор
+login: ealobashev password: 1UGDzdP4
+
+Макарчук Алексей
+login: aimakarchuk password: jR5Tn3Fm
+
+Малиновская Мария
+login: msmalinovskaja password: SnYm0vH4
+
+Мацейко Альберт
+login: avmatsejko password: Z5IXOKEd
+
+Павлов Вячеслав
+login: vspavlov password: HmXrsEk7
+
+Поляков Андрей
+login: avpoljakov password: gQYFwnVp
+
+Попова Мария
+login: mspopova password: k4zMOsdL
+
+Стрельцова Александрина
+login: aastrel'tsova password: 7IV0vzTt
+
+Тимохин Николай
+login: nptimohin password: SkxHeV6r
+
+Фадеев Александр
+login: agfadeev password: ujB3XPyC
+
+Цинин Андрей
+login: adtsinin password: rmkCDB9N
+
+Черепанова Наталия
+login: nvcherepanova password: HezKq2cV
+
+Шагарова Наталья
+login: nmshagarova password: VWGxuriM
+
+Яхтин Леонид
+login: lajahtin password: Ah3O8fli
+
+Авсянникова Анастасия
+login: apavsjannikova password: SM4uK7yA
+
+Бажилова Ева
+login: evbazhilova password: YoQ7iqku
+
+Балахнин Сергей
+login: sabalahnin password: foVhzUn2
+
+Башкиров Александр
+login: adbashkirov password: KY4RbTAO
+
+Белкин Михаил
+login: mabelkin password: lSJsOEKx
+
+Великанова Марина
+login: mavelikanova password: JntbfITd
+
+Гвардин Ростислав
+login: r gvardin password: 7xKOBz8Z
+
+Гиндинсон Артем
+login: amgindinson password: 20RY9cUj
+
+Горбачева Юлия
+login: juagorbacheva password: 8KplbOY0
+
+Дмитриев Никита
+login: nidmitriev password: tE6f4bcg
+
+Езерская Анастасия
+login: akezerskaja password: CDevNmP6
+
+Емельянов Николай
+login: naemel'janov password: xs6m8Yqf
+
+Ерухимова Наталья
+login: nveruhimova password: J2atyZYG
+
+Камсков Сергей
+login: smkamskov password: eJqYMBw5
+
+Канафеева Анжелика
+login: aikanafeeva password: OlFbs1r6
+
+Клубков Александр
+login: avklubkov password: apK53AS1
+
+Коган Анна
+login: aakogan password: 5xTvK8tq
+
+Логвин Надежда
+login: nmlogvin password: 8xO0JCgP
+
+Мальчикова Юлия
+login: jusmal'chikova password: Nir7SGox
+
+Манкус Данюс
+login: drmankus password: a8FjIYZm
+
+Молодецкий Арсений
+login: aamolodetskij password: xUZdrnkm
+
+Мыльникова Ольга
+login: ommyl'nikova password: 03e4LlNQ
+
+Новиков Андрей
+login: aanovikov password: 31oshe5z
+
+Павлова Полина
+login: pkpavlova password: G1eBPqKU
+
+Подкидышев Алексей
+login: aspodkidyshev password: BNm7uwD1
+
+Полетуева Анастасия
+login: anpoletueva password: xHca0Bk4
+
+Поляков Андрей
+login: aspoljakov password: e2zjYK7O
+
+Рябчикова Валерия
+login: vgrjabchikova password: 8bZXVBcs
+
+Серова Екатерина
+login: easerova password: EhseK1Z2
+
+Сонина Мария
+login: mssonina password: EmG8NA15
+
+Тамаркина Нина
+login: natamarkina password: afz0oyMF
+
+Тарасова Татьяна
+login: t tarasova password: id0ylA71
+
+Фролов Александр
+login: adfrolov password: YWI52vLM
+
+Чувакин Павел
+login: pachuvakin password: oWA591pI
+
+Щепин Кирилл
+login: kmschepin password: zCOKnXad
+
+Янышев Егор
+login: edjanyshev password: eZC6X9Yf
+
+Башкин Никита
+login: nobashkin password: 3jawThiq
+

@@ -30,10 +30,14 @@
         <td>{{t.get_creation_date}}</td>
         <td>{{t.type}}</td>
 
-        <td>{% if t.value > 0 %}
+        <td>{% if t.type.group1 != 'attend' %}
+            {% if t.value > 0 %}
             +
             {% endif %}
-            {{t.get_value}}@
+            {{t.get_value}}@ {{t.type.group1}}
+            {% else %}
+            <!----{{t.get_value_as_date}}--->-
+            {% endif%}
         </td>
         <td>{{t.creator.account}}</td>
         <td>{{t.status}}</td>

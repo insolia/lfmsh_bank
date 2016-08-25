@@ -32,6 +32,9 @@ urlpatterns = patterns('',
                        url(r'^add_trans/fine/', views.add_fine, name='add_fine'),
                        url(r'^add_trans/lec/', views.add_lec, name='add_lec'),
                        url(r'^add_trans/fac_att/', views.add_fac_att, name='add_fac_att'),
+                       url(r'^add_trans/exam/(?P<meta_link_pk>[0-9]+)', views.add_exam, name='add_exam'),
+                       url(r'^add_trans/exam/', views.add_exam, name='add_exam'),
+
 
                        url(r'^dec_trans/(?P<trans_id>[0-9]+)/$', views.dec_trans, name='trans_dec'),
                        url(r'^dec_trans_ok/(?P<trans_id>[0-9]+)/$', views.dec_trans_ok, name='trans_dec_ok'),
@@ -45,6 +48,7 @@ urlpatterns = patterns('',
 
                        url(r'^pioner-autocomplete/$', PionerAutocomplete.as_view(), name='pioner-autocomplete'),
                        url(r'^super_table/$', views.super_table, name='super_table'),
+					   url(r'^media/$', views.media, name='media'),
 
                        )
 

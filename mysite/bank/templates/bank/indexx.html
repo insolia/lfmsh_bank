@@ -46,8 +46,10 @@
 {% if 'bank.see_super_table' in request.user.get_all_permissions %}
 <a href="{% url 'bank:super_table' %}"class="btn btn-primary  " role="button"> Посмотреть супер таблицу</a>
 <br><br>
-
 {%endif%}
+
+Суммарные деньги пионеров: {{s}}
+<br><br>
 
 {% if 'bank.add_transaction' in request.user.get_all_permissions %}
 <br><br>
@@ -72,6 +74,8 @@
 
 
 <a href="{% url 'bank:add_fac' %}"> Зачет за факультатив </a>
+<br>
+<a href="{% url 'bank:add_exam' %}"> Баллы за экзамен по лекции </a>
 <br>
 
 <a href="{% url 'bank:add_activity' %}"> Призы за мероприятия </a>

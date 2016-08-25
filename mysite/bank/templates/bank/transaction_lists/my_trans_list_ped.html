@@ -31,10 +31,17 @@
         <td>{{t.get_creation_date}}</td>
         <td>{{t.type}}</td>
 
-        <td>{% if t.value > 0 %}
+        <td>
+            {% if t.type.group1 != 'attend' %}
+            {% if t.value > 0 %}
             +
             {% endif %}
             {{t.get_value}}@
+            {% else %}
+            {{t.get_value_as_date}}
+            {% endif%}
+
+
         </td>
         {% if t.recipient %}
         <td>{{t.recipient.account}}</td>

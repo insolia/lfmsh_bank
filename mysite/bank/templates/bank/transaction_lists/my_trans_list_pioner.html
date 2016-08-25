@@ -97,7 +97,7 @@
 
         <td>
 
-            {% if t.can_be_declined %}
+            {% if t.can_be_declined and t.type.name != 'propen' %}
             <a class="btn btn-info" href="{% url 'bank:trans_dec' t.pk %}" role="button">Отменить</a>
             {% else %}
             <p> Нельзя отменить</p>
